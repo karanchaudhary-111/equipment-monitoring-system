@@ -15,8 +15,9 @@ private:
     string status;
 
 public:
-    Equipment(string name, double temperature, double pressure, double vibration, string status);
+    Equipment(string name, double temperature, double pressure, double vibration);
 
+    void determineStatus();
     void display();
 };
 

@@ -3,13 +3,24 @@
 
 using namespace std;
 
-Equipment::Equipment(string name, double temperature, double pressure, double vibration, string status)
+Equipment::Equipment(string name, double temperature, double pressure, double vibration)
 {
     this->name = name;
     this->temperature = temperature;
     this->pressure = pressure;
     this->vibration = vibration;
-    this->status = status;
+
+    determineStatus();
+}
+
+void Equipment::determineStatus(){
+    if(temperature <= 80 && pressure <= 6 && vibration <= 3){
+        status = "NORMAL";
+    }else if(temperature <= 100 && pressure <= 8 && vibration <= 5){
+        status = "WARNING";
+    }else{
+        status = "CRITICAL";
+    }
 }
 
 void Equipment::display()
