@@ -8,19 +8,31 @@ int main()
 {
     vector<Equipment> equipmentList;
 
-    equipmentList.push_back(
-        Equipment("Motor-01", 70.0, 5.2, 2.5)
-    );
+    string name;
 
-    equipmentList.push_back(
-        Equipment("Pump-01", 82.0, 6.1, 4.2)
-    );
+    cout << "Enter equipment name: ";
+    getline(cin, name);
 
-    equipmentList.push_back(
-        Equipment("Compressor-01", 110.0, 7.0, 4.0)
-    );
+    double temperature;
 
-    for (Equipment equipment : equipmentList)
+    cout << "Enter temperature: ";
+    cin >> temperature;
+
+    double pressure;
+
+    cout << "Enter pressure: ";
+    cin >> pressure;
+
+    double vibration;
+
+    cout << "Enter vibration: ";
+    cin >> vibration;
+
+    Equipment newEquipment(name, temperature, pressure, vibration);
+
+    equipmentList.push_back(newEquipment);
+
+    for (const Equipment& equipment : equipmentList)
     {
         equipment.display();
         cout << "----------------------" << endl;

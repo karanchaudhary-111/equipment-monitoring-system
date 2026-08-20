@@ -23,7 +23,7 @@ void Equipment::determineStatus(){
     }
 }
 
-void Equipment::display()
+void Equipment::display() const
 {
     cout << "Equipment: " << name << endl;
     cout << "Temperature: " << temperature << " C" << endl;
