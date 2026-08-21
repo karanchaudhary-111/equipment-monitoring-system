@@ -19,6 +19,7 @@ public:
 
     void determineStatus();
     void display() const;
+    void showAlert() const;
 };
 
 #endif

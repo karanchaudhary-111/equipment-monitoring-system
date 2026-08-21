@@ -30,4 +30,17 @@ void Equipment::display() const
     cout << "Pressure: " << pressure << " bar" << endl;
     cout << "Vibration: " << vibration << " mm/s" << endl;
     cout << "Status: " << status << endl;
+
+    showAlert();
+}
+
+void Equipment::showAlert() const
+{
+    if(status ==  "WARNING"){
+        cout << "WARNING..." << name << " need monitoring." << endl;
+    }
+
+    if(status == "CRITICAL"){
+        cout << "Alert..." << name << " requires immediate attention!" << endl;
+    }
 }
