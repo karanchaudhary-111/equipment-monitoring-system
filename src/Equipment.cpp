@@ -1,5 +1,6 @@
 #include "Equipment.h"
 #include <iostream>
+#include <fstream>
 
 using namespace std;
 
@@ -43,4 +44,21 @@ void Equipment::showAlert() const
     if(status == "CRITICAL"){
         cout << "Alert..." << name << " requires immediate attention!" << endl;
     }
+}
+
+void Equipment::saveToFile() const
+{
+    ofstream file("equipment_report.txt", ios::app);
+
+    file << "Equipment: " << name << endl;
+    file << "Temperature: " << temperature << " C" << endl;
+    file << "Pressure: " << pressure << " bar" << endl;
+    file << "Vibration: " << vibration << " mm/s" << endl;
+    file << "Status: " << status << endl;
+
+    file << endl;
+    file << "----------------------------" << endl;
+    file << endl;
+
+    file.close();
 }

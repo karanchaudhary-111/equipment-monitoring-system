@@ -20,6 +20,7 @@ public:
     void determineStatus();
     void display() const;
     void showAlert() const;
+    void saveToFile() const;
 };
 
 #endif

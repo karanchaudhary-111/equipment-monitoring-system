@@ -8,33 +8,42 @@ int main()
 {
     vector<Equipment> equipmentList;
 
-    string name;
+    int n;
+    cout << "Enter nummber of equipment: ";
+    cin >> n;
+    cin.ignore();
 
-    cout << "Enter equipment name: ";
-    getline(cin, name);
+    for(int i = 0; i < n; i++){
 
-    double temperature;
+        cout << "\nEnter details for Equipment " << i + 1 << endl;
 
-    cout << "Enter temperature: ";
-    cin >> temperature;
+        string name;
+        cout << "Enter equipment name: ";
+        getline(cin, name);
 
-    double pressure;
+        double temperature;
+        cout << "Enter temperature: ";
+        cin >> temperature;
 
-    cout << "Enter pressure: ";
-    cin >> pressure;
+        double pressure;
+        cout << "Enter pressure: ";
+        cin >> pressure;
 
-    double vibration;
+        double vibration;
+        cout << "Enter vibration: ";
+        cin >> vibration;
 
-    cout << "Enter vibration: ";
-    cin >> vibration;
+        cin.ignore();
 
-    Equipment newEquipment(name, temperature, pressure, vibration);
+        Equipment newEquipment(name, temperature, pressure, vibration);
 
-    equipmentList.push_back(newEquipment);
+        equipmentList.push_back(newEquipment);
+    }
 
     for (const Equipment& equipment : equipmentList)
     {
         equipment.display();
+        equipment.saveToFile();
         cout << "----------------------" << endl;
     }
 
