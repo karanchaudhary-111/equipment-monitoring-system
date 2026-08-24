@@ -21,6 +21,7 @@ public:
     void display() const;
     void showAlert() const;
     void saveToFile() const;
+    string getStatus() const;
 };
 
 #endif

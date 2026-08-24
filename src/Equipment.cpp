@@ -62,3 +62,8 @@ void Equipment::saveToFile() const
 
     file.close();
 }
+
+string Equipment::getStatus() const
+{
+    return status;
+}

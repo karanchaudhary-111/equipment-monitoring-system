@@ -8,6 +8,10 @@ int main()
 {
     vector<Equipment> equipmentList;
 
+    int normalCount  = 0;
+    int warningCount = 0;
+    int criticalCount   = 0;
+
     int n;
     cout << "Enter nummber of equipment: ";
     cin >> n;
@@ -39,13 +43,31 @@ int main()
 
         equipmentList.push_back(newEquipment);
     }
+    cout << endl << endl;
 
     for (const Equipment& equipment : equipmentList)
     {
         equipment.display();
         equipment.saveToFile();
+
+        if(equipment.getStatus() == "NORMAL"){
+            normalCount++;
+        }
+        else if(equipment.getStatus() == "WARNING"){
+            warningCount++;
+        }else{
+            criticalCount++;
+        }
+
         cout << "----------------------" << endl;
     }
+
+    cout << "\n===== EQUIPMENT SUMMARY =====" << endl;
+
+    cout << "Total Equipment: " << equipmentList.size() << endl;
+    cout << "NORMAL: " << normalCount << endl;
+    cout << "WARNING: " << warningCount << endl;
+    cout << "CRITICAL: " << criticalCount << endl;
 
     return 0;
 }
