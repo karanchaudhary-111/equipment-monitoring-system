@@ -22,6 +22,7 @@ public:
     void showAlert() const;
     void saveToFile() const;
     string getStatus() const;
+    string getName() const;    // using get word for access the name in main function bcs name is in private.
 };
 
 #endif

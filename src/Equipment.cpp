@@ -67,3 +67,8 @@ string Equipment::getStatus() const
 {
     return status;
 }
+
+string Equipment::getName() const
+{
+    return name;
+}

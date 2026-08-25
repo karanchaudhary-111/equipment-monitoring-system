@@ -69,5 +69,26 @@ int main()
     cout << "WARNING: " << warningCount << endl;
     cout << "CRITICAL: " << criticalCount << endl;
 
+    string searchName;
+
+    cout << "\nEnter equipment name to search: ";
+    getline(cin, searchName);
+
+    bool  found = false;
+
+    for(const Equipment & equipment : equipmentList){
+        if(equipment.getName() == searchName){
+
+            cout << "\n===== SEARCH RESULT =====" << endl;
+            equipment.display();
+
+            found = true;
+            break;
+        }
+    }
+    if(!found){
+        cout << "Equipment is not found." << endl;
+    }
+
     return 0;
 }
