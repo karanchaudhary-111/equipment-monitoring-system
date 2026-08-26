@@ -44,6 +44,7 @@ int main()
         equipmentList.push_back(newEquipment);
     }
     cout << endl << endl;
+    vector<string> criticalEquipment;
 
     for (const Equipment& equipment : equipmentList)
     {
@@ -57,6 +58,7 @@ int main()
             warningCount++;
         }else{
             criticalCount++;
+            criticalEquipment.push_back(equipment.getName());
         }
 
         cout << "----------------------" << endl;
@@ -68,6 +70,17 @@ int main()
     cout << "NORMAL: " << normalCount << endl;
     cout << "WARNING: " << warningCount << endl;
     cout << "CRITICAL: " << criticalCount << endl;
+
+    cout << "\nCritical Equipment:" << endl;
+
+    if(criticalEquipment.empty()){
+        cout << "There is no critical equipment." << endl;
+    }
+
+    for(const string &name : criticalEquipment)
+    {
+        cout << "- " << name << endl;
+    }
 
     string searchName;
 
