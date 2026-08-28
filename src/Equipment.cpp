@@ -72,3 +72,18 @@ string Equipment::getName() const
 {
     return name;
 }
+
+double Equipment:: getTemp() const
+{
+    return temperature;
+}
+
+double Equipment:: getPressure() const
+{
+    return pressure;
+}
+
+double Equipment:: getVibration() const
+{
+    return vibration;
+}

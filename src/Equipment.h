@@ -23,6 +23,10 @@ public:
     void saveToFile() const;
     string getStatus() const;
     string getName() const;    // using get word for access the name in main function bcs name is in private.
+    double getTemp() const;
+    double getPressure() const;
+    double getVibration() const;
+
 };
 
 #endif

@@ -46,6 +46,20 @@ int main()
     cout << endl << endl;
     vector<string> criticalEquipment;
 
+    // find total measurement of temp, pressure and vibration
+    double totalTemperature = 0;
+    double totalPressure    = 0;
+    double totalVibration   = 0;
+
+    // find highest temperature and their names
+    double highestTemperature = equipmentList[0].getTemp();
+    string highestTempEquipment = equipmentList[0].getName();
+
+    // find lowest temperature and their names
+    double lowestTemperature = equipmentList[0].getTemp();
+    string lowestTempEquipment = equipmentList[0].getName();
+
+
     for (const Equipment& equipment : equipmentList)
     {
         equipment.display();
@@ -61,9 +75,28 @@ int main()
             criticalEquipment.push_back(equipment.getName());
         }
 
+        // In loop health statistic
+        totalTemperature += equipment.getTemp();
+        totalPressure    += equipment.getPressure();
+        totalVibration   += equipment.getVibration();
+
+        // for highest
+        if(equipment.getTemp() > highestTemperature){
+            highestTemperature = equipment.getTemp();
+            highestTempEquipment = equipment.getName();
+        }
+
+        // for lowest
+        if(equipment.getTemp() < lowestTemperature){
+            lowestTemperature = equipment.getTemp();
+            lowestTempEquipment = equipment.getName();
+        }
+
         cout << "----------------------" << endl;
     }
 
+
+    // equipment summary 
     cout << "\n===== EQUIPMENT SUMMARY =====" << endl;
 
     cout << "Total Equipment: " << equipmentList.size() << endl;
@@ -71,6 +104,9 @@ int main()
     cout << "WARNING: " << warningCount << endl;
     cout << "CRITICAL: " << criticalCount << endl;
 
+
+
+    // critical equipment 
     cout << "\nCritical Equipment:" << endl;
 
     if(criticalEquipment.empty()){
@@ -82,6 +118,24 @@ int main()
         cout << "- " << name << endl;
     }
 
+    // for health statistics
+    double avgTemperature = totalTemperature / equipmentList.size();
+    double avgPressure = totalPressure / equipmentList.size();
+    double avgVibration = totalVibration / equipmentList.size();
+
+    cout << "\n===== HEALTH STATISTICS =====" << endl;
+
+    cout << "Average Temperature: " << avgTemperature << " C" << endl;
+    cout << "Average Pressure: " << avgPressure << " bar" << endl;
+    cout << "Average Vibration: " << avgVibration << " mm/s" << endl << endl;;
+
+    cout  << endl << "Highest Temperature Equipment: " << highestTempEquipment << endl;
+    cout << "Highest Temperature: " << highestTemperature << " C" << endl << endl;
+
+    cout  << endl << "Lowest Temperature Equipment: " << lowestTempEquipment << endl;
+    cout << "Lowest Temperature: " << lowestTemperature << " C" << endl;
+
+    // search a equipment name through directly searching
     string searchName;
 
     cout << "\nEnter equipment name to search: ";
