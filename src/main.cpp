@@ -13,8 +13,13 @@ int main()
     int criticalCount   = 0;
 
     int n;
-    cout << "Enter nummber of equipment: ";
+    cout << "Enter number of equipments: ";
     cin >> n;
+    
+    if(n <= 0){
+        cout << "Number of Equipment is greater than 0," << endl;
+        return 0;
+    }
     cin.ignore();
 
     for(int i = 0; i < n; i++){
@@ -46,6 +51,53 @@ int main()
     cout << endl << endl;
     vector<string> criticalEquipment;
 
+    // search a equipment name through directly searching
+    string searchName;
+
+    cout << "\nEnter equipment name to search: ";
+    getline(cin, searchName);
+
+    bool  found = false;
+
+    for(Equipment & equipment : equipmentList){
+        if(equipment.getName() == searchName){
+
+            cout << "\n===== SEARCH RESULT =====" << endl;
+            equipment.display();
+
+            char choice;
+
+            cout << "\nDo you want to update readings? (y/n): ";
+            cin >> choice;
+
+            if(choice == 'y' || choice == 'Y'){
+                double newTemperature;
+                double newPressure;
+                double newVibration;
+
+                cout << "Enter new temperature: ";
+                cin >> newTemperature;
+
+                cout << "Enter new pressure: ";
+                cin >> newPressure;
+
+                cout << "Enter new vibration: ";
+                cin >> newVibration;
+
+                equipment.updateReadings(newTemperature, newPressure, newVibration);
+
+                cout << "\n===== UPDATED EQUIPMENT =====" << endl;
+                equipment.display();
+            }
+
+            found = true;
+            break;
+        }
+    }
+    if(!found){
+        cout << "Equipment is not found." << endl;
+    }
+
     // find total measurement of temp, pressure and vibration
     double totalTemperature = 0;
     double totalPressure    = 0;
@@ -58,6 +110,9 @@ int main()
     // find lowest temperature and their names
     double lowestTemperature = equipmentList[0].getTemp();
     string lowestTempEquipment = equipmentList[0].getName();
+
+    // for all equipment output
+    cout << "\n\n===== ALL EQUIPMENTS =====" << endl;
 
 
     for (const Equipment& equipment : equipmentList)
@@ -135,27 +190,6 @@ int main()
     cout  << endl << "Lowest Temperature Equipment: " << lowestTempEquipment << endl;
     cout << "Lowest Temperature: " << lowestTemperature << " C" << endl;
 
-    // search a equipment name through directly searching
-    string searchName;
-
-    cout << "\nEnter equipment name to search: ";
-    getline(cin, searchName);
-
-    bool  found = false;
-
-    for(const Equipment & equipment : equipmentList){
-        if(equipment.getName() == searchName){
-
-            cout << "\n===== SEARCH RESULT =====" << endl;
-            equipment.display();
-
-            found = true;
-            break;
-        }
-    }
-    if(!found){
-        cout << "Equipment is not found." << endl;
-    }
 
     return 0;
 }

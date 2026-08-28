@@ -87,3 +87,12 @@ double Equipment:: getVibration() const
 {
     return vibration;
 }
+
+void Equipment:: updateReadings(double newTemperature, double newPressure, double newVibration)
+{
+    this->temperature = newTemperature;
+    this->pressure = newPressure;
+    this->vibration = newVibration;
+
+    determineStatus();
+}

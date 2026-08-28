@@ -26,6 +26,7 @@ public:
     double getTemp() const;
     double getPressure() const;
     double getVibration() const;
+    void updateReadings(double newTemperature, double newPressure, double newVibration);
 
 };
 
