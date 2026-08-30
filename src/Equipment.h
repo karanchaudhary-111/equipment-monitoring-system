@@ -2,8 +2,17 @@
 #define EQUIPMENT_H
 
 #include <string>
+#include <vector>
 
 using namespace std;
+
+struct Reading
+{
+    double temperature;
+    double pressure;
+    double vibration;
+    string status;
+};
 
 class Equipment
 {
@@ -13,6 +22,7 @@ private:
     double pressure;
     double vibration;
     string status;
+    vector<Reading> history;
 
 public:
     Equipment(string name, double temperature, double pressure, double vibration);
@@ -27,6 +37,7 @@ public:
     double getPressure() const;
     double getVibration() const;
     void updateReadings(double newTemperature, double newPressure, double newVibration);
+    void displayHistory() const;
 
 };
 

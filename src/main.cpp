@@ -12,6 +12,7 @@ int main()
     int warningCount = 0;
     int criticalCount   = 0;
 
+    // for number of equipments
     int n;
     cout << "Enter number of equipments: ";
     cin >> n;
@@ -22,6 +23,7 @@ int main()
     }
     cin.ignore();
 
+    // user input
     for(int i = 0; i < n; i++){
 
         cout << "\nEnter details for Equipment " << i + 1 << endl;
@@ -49,6 +51,7 @@ int main()
         equipmentList.push_back(newEquipment);
     }
     cout << endl << endl;
+
     vector<string> criticalEquipment;
 
     // search a equipment name through directly searching
@@ -88,6 +91,9 @@ int main()
 
                 cout << "\n===== UPDATED EQUIPMENT =====" << endl;
                 equipment.display();
+                
+                cout << "\n===== READING HISTORY =====" << endl;
+                equipment.displayHistory();
             }
 
             found = true;
