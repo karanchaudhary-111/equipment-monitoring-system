@@ -73,7 +73,7 @@ int main()
             cout << "\nDo you want to update readings? (y/n): ";
             cin >> choice;
 
-            if(choice == 'y' || choice == 'Y'){
+            while(choice == 'y' || choice == 'Y'){
                 double newTemperature;
                 double newPressure;
                 double newVibration;
@@ -94,6 +94,9 @@ int main()
                 
                 cout << "\n===== READING HISTORY =====" << endl;
                 equipment.displayHistory();
+
+                cout << "\nDo you want to update again? (y/n): ";
+                cin >> choice;
             }
 
             found = true;
