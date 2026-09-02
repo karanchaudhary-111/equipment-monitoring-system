@@ -60,10 +60,31 @@ int main()
     cout << "\nEnter equipment name to search: ";
     getline(cin, searchName);
 
+    for(int i = 0; i < searchName.size(); i++)
+    {
+        if(searchName[i] >= 'A' && searchName[i] <= 'Z')
+        {
+            char ch = searchName[i] - 'A' + 'a';
+            searchName[i] = ch;
+        }
+    }
+
     bool  found = false;
 
     for(Equipment & equipment : equipmentList){
-        if(equipment.getName() == searchName){
+
+        string equipmentName = equipment.getName();
+
+        for(int i = 0; i < equipmentName.size(); i++)
+        {
+            if(equipmentName[i] >= 'A' && equipmentName[i] <= 'Z')
+            {
+                char ch = equipmentName[i] - 'A' + 'a';
+                equipmentName[i] = ch;
+            }
+        }
+
+        if(equipmentName == searchName){
 
             cout << "\n===== SEARCH RESULT =====" << endl;
             equipment.display();
