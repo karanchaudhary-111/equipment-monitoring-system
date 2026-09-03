@@ -109,17 +109,22 @@ void Equipment:: updateReadings(double newTemperature, double newPressure, doubl
 
 void Equipment::displayHistory() const
 {
-    cout << "Equipment: " << name << endl;
-    int count = 1;
-    for(const Reading &reading : history)
-    {
-        cout << "\nReading " << count << endl;
-        cout << "Temperature: " << reading.temperature << " C" << endl;
-        cout << "Pressure: " << reading.pressure << " bar" << endl;
-        cout << "Vibration: " << reading.vibration << " mm/s" << endl;
-        cout << "Status: " << reading.status << endl;
-        cout << "----------------------" << endl;
-        count++;
+    if(history.empty()){
+        cout << "No previous readings available." << endl;
+    }else{
+        cout << "Equipment: " << name << endl;
+        int count = 1;
+        
+        for(const Reading &reading : history)
+        {
+            cout << "\nReading " << count << endl;
+            cout << "Temperature: " << reading.temperature << " C" << endl;
+            cout << "Pressure: " << reading.pressure << " bar" << endl;
+            cout << "Vibration: " << reading.vibration << " mm/s" << endl;
+            cout << "Status: " << reading.status << endl;
+            cout << "----------------------" << endl;
+            count++;
 
+        }
     }
 }

@@ -18,7 +18,7 @@ int main()
     cin >> n;
     
     if(n <= 0){
-        cout << "Number of Equipment is greater than 0," << endl;
+        cout << "Number of Equipment should be greater than 0," << endl;
         return 0;
     }
     cin.ignore();
@@ -112,12 +112,18 @@ int main()
 
                 cout << "\n===== UPDATED EQUIPMENT =====" << endl;
                 equipment.display();
-                
-                cout << "\n===== READING HISTORY =====" << endl;
-                equipment.displayHistory();
 
                 cout << "\nDo you want to update again? (y/n): ";
                 cin >> choice;
+            }
+
+            char historyChoice;
+            cout << "Do you want to view reading history? (y/n):";
+            cin >> historyChoice;
+
+            if(historyChoice == 'y' || historyChoice == 'Y'){
+                cout << "\n===== READING HISTORY =====" << endl;
+                equipment.displayHistory();
             }
 
             found = true;
