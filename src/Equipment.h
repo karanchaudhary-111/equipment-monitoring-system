@@ -23,6 +23,7 @@ private:
     double vibration;
     string status;
     vector<Reading> history;
+    vector<string> statusHistory;
 
 public:
     Equipment(string name, double temperature, double pressure, double vibration);
@@ -38,6 +39,7 @@ public:
     double getVibration() const;
     void updateReadings(double newTemperature, double newPressure, double newVibration);
     void displayHistory() const;
+    void displayStatusHistory() const;
 
 };
 

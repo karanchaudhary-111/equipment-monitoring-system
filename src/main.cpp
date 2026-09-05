@@ -12,7 +12,7 @@ int main()
     int warningCount = 0;
     int criticalCount   = 0;
 
-    // for number of equipments
+    // FOR HOW MUCH EQUIPMENT YOU WANT
     int n;
     cout << "Enter number of equipments: ";
     cin >> n;
@@ -23,7 +23,7 @@ int main()
     }
     cin.ignore();
 
-    // user input
+    // FOR USER INPUT OF EQUIPMENT DETAILS
     for(int i = 0; i < n; i++){
 
         cout << "\nEnter details for Equipment " << i + 1 << endl;
@@ -54,12 +54,13 @@ int main()
 
     vector<string> criticalEquipment;
 
-    // search a equipment name through directly searching
+    // SEARCH A EQUIPMENT NAME AND THEIR DETAILS BY DIRECTLY
     string searchName;
 
     cout << "\nEnter equipment name to search: ";
     getline(cin, searchName);
 
+    // TO CHANGE LOWERCASE OF SEARCHNAME
     for(int i = 0; i < searchName.size(); i++)
     {
         if(searchName[i] >= 'A' && searchName[i] <= 'Z')
@@ -77,6 +78,7 @@ int main()
 
         for(int i = 0; i < equipmentName.size(); i++)
         {
+            // TO CHANGE STORED EQUIPMENT NAME
             if(equipmentName[i] >= 'A' && equipmentName[i] <= 'Z')
             {
                 char ch = equipmentName[i] - 'A' + 'a';
@@ -91,6 +93,7 @@ int main()
 
             char choice;
 
+            // UPDATE NEW READING OF EQUIPMENT NAME
             cout << "\nDo you want to update readings? (y/n): ";
             cin >> choice;
 
@@ -117,13 +120,26 @@ int main()
                 cin >> choice;
             }
 
+            // SHOW THE ALL HISTORY OF EQUIPMENT CHANGES
             char historyChoice;
-            cout << "Do you want to view reading history? (y/n):";
+            cout << "Do you want to view reading history? (y/n): ";
             cin >> historyChoice;
 
             if(historyChoice == 'y' || historyChoice == 'Y'){
                 cout << "\n===== READING HISTORY =====" << endl;
+
                 equipment.displayHistory();
+            }
+
+            char statusHistoryChoice;
+
+            cout << "\nDo you want to view status change history? (y/n): ";
+            cin >> statusHistoryChoice;
+
+            if(statusHistoryChoice == 'y' || statusHistoryChoice == 'Y')
+            {
+                cout << "\n===== STATUS CHANGE HISTORY =====" << endl;
+                equipment.displayStatusHistory();
             }
 
             found = true;
@@ -134,20 +150,20 @@ int main()
         cout << "Equipment is not found." << endl;
     }
 
-    // find total measurement of temp, pressure and vibration
+    // FIND TOTAL MEASUREMENT OF ALL READINGS
     double totalTemperature = 0;
     double totalPressure    = 0;
     double totalVibration   = 0;
 
-    // find highest temperature and their names
+    // VARIABLE OF HIGHEST TEMPERATURE IN LIST AND ALSO THEIR NAME
     double highestTemperature = equipmentList[0].getTemp();
     string highestTempEquipment = equipmentList[0].getName();
 
-    // find lowest temperature and their names
+    // VARIABLE OF LOWEST TEMPERATURE IN LIST AND ALSO THEIR NAME
     double lowestTemperature = equipmentList[0].getTemp();
     string lowestTempEquipment = equipmentList[0].getName();
 
-    // for all equipment output
+    // OUTPUT OF ALL EQUIPMENT PRESENT IN VECTOR
     cout << "\n\n===== ALL EQUIPMENTS =====" << endl;
 
 
@@ -166,18 +182,18 @@ int main()
             criticalEquipment.push_back(equipment.getName());
         }
 
-        // In loop health statistic
+        // IN LOOP  HEALTH STATS
         totalTemperature += equipment.getTemp();
         totalPressure    += equipment.getPressure();
         totalVibration   += equipment.getVibration();
 
-        // for highest
+        // FIND HIGHEST TEMP AND NAME
         if(equipment.getTemp() > highestTemperature){
             highestTemperature = equipment.getTemp();
             highestTempEquipment = equipment.getName();
         }
 
-        // for lowest
+        // FIND LOWEST TEMP AND NAME
         if(equipment.getTemp() < lowestTemperature){
             lowestTemperature = equipment.getTemp();
             lowestTempEquipment = equipment.getName();
@@ -187,7 +203,7 @@ int main()
     }
 
 
-    // equipment summary 
+    // EQUIPMENT SUMMARY
     cout << "\n===== EQUIPMENT SUMMARY =====" << endl;
 
     cout << "Total Equipment: " << equipmentList.size() << endl;
@@ -197,7 +213,7 @@ int main()
 
 
 
-    // critical equipment 
+    // CRITICAL EQUIPMENT
     cout << "\nCritical Equipment:" << endl;
 
     if(criticalEquipment.empty()){
@@ -209,7 +225,7 @@ int main()
         cout << "- " << name << endl;
     }
 
-    // for health statistics
+    // FOR HEALTH STATISTIC
     double avgTemperature = totalTemperature / equipmentList.size();
     double avgPressure = totalPressure / equipmentList.size();
     double avgVibration = totalVibration / equipmentList.size();

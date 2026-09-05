@@ -4,6 +4,7 @@
 
 using namespace std;
 
+
 Equipment::Equipment(string name, double temperature, double pressure, double vibration)
 {
     this->name = name;
@@ -97,7 +98,8 @@ void Equipment:: updateReadings(double newTemperature, double newPressure, doubl
     oldReading.vibration   = vibration;
     oldReading.status      = status;
 
-     history.push_back(oldReading);
+    history.push_back(oldReading);
+    string oldStatus = status;
 
 
     this->temperature = newTemperature;
@@ -105,6 +107,14 @@ void Equipment:: updateReadings(double newTemperature, double newPressure, doubl
     this->vibration   = newVibration;
 
     determineStatus();
+
+    if(oldStatus != status)
+    {
+        string transition = oldStatus + " -> " + status;
+        statusHistory.push_back(transition);
+
+        cout << "Status changed: " << transition << endl;
+    }
 }
 
 void Equipment::displayHistory() const
@@ -126,5 +136,22 @@ void Equipment::displayHistory() const
             count++;
 
         }
+    }
+}
+
+void Equipment::displayStatusHistory() const
+{
+    if(statusHistory.empty())
+    {
+        cout << "No status changes recorded." << endl;
+        return;
+    }
+
+    int count = 1;
+
+    for(const string &transition : statusHistory)
+    {
+        cout << count << ". " << transition << endl;
+        count++;
     }
 }
