@@ -4,7 +4,7 @@
 
 using namespace std;
 
-
+// Constructor: initializes a new equipment object with its sensor readings.
 Equipment::Equipment(string name, double temperature, double pressure, double vibration)
 {
     this->name = name;
@@ -15,6 +15,8 @@ Equipment::Equipment(string name, double temperature, double pressure, double vi
     determineStatus();
 }
 
+// Determines the equipment condition based on the current
+// temperature, pressure, and vibration readings.
 void Equipment::determineStatus(){
     if(temperature <= 80 && pressure <= 6 && vibration <= 3){
         status = "NORMAL";
@@ -25,6 +27,9 @@ void Equipment::determineStatus(){
     }
 }
 
+
+// Displays the current sensor readings and status of the equipment.
+// After displaying the data, showAlert() checks whether an alert is required.
 void Equipment::display() const
 {
     cout << "Equipment: " << name << endl;
@@ -36,6 +41,8 @@ void Equipment::display() const
     showAlert();
 }
 
+// Displays an alert only when the equipment is in WARNING or CRITICAL state.
+// NORMAL equipment does not require an alert.
 void Equipment::showAlert() const
 {
     if(status ==  "WARNING"){
@@ -47,6 +54,8 @@ void Equipment::showAlert() const
     }
 }
 
+// Saves the current equipment details to equipment_report.txt.
+// ios::app is used so new reports are added without deleting previous data.
 void Equipment::saveToFile() const
 {
     ofstream file("equipment_report.txt", ios::app);
@@ -64,6 +73,7 @@ void Equipment::saveToFile() const
     file.close();
 }
 
+// Getter functions provide read-only access to private equipment data.
 string Equipment::getStatus() const
 {
     return status;
@@ -89,8 +99,10 @@ double Equipment:: getVibration() const
     return vibration;
 }
 
+// Updates the sensor readings while preserving the previous reading.
 void Equipment:: updateReadings(double newTemperature, double newPressure, double newVibration)
 {
+    // Save the current reading before replacing it with new values.
     Reading oldReading;
 
     oldReading.temperature = temperature;
@@ -99,15 +111,19 @@ void Equipment:: updateReadings(double newTemperature, double newPressure, doubl
     oldReading.status      = status;
 
     history.push_back(oldReading);
+
+    // Remember the old status for status-change detection.
     string oldStatus = status;
 
-
+    // Replace the sensor values with the new readings.
     this->temperature = newTemperature;
     this->pressure    = newPressure;
     this->vibration   = newVibration;
 
+    // Acts as a bridge between the new sensor values and the new status.
     determineStatus();
 
+    // If the status changed, store the transition in statusHistory.
     if(oldStatus != status)
     {
         string transition = oldStatus + " -> " + status;
@@ -117,6 +133,9 @@ void Equipment:: updateReadings(double newTemperature, double newPressure, doubl
     }
 }
 
+// Displays all PREVIOUS readings stored before equipment updates.
+// The current/latest reading is stored in the Equipment object itself,
+// so it is not part of this history vector.
 void Equipment::displayHistory() const
 {
     if(history.empty()){
@@ -139,6 +158,9 @@ void Equipment::displayHistory() const
     }
 }
 
+// Displays only the recorded STATUS TRANSITIONS.
+// Example: CRITICAL -> NORMAL, NORMAL -> WARNING.
+// Updates that keep the same status are not stored here.
 void Equipment::displayStatusHistory() const
 {
     if(statusHistory.empty())

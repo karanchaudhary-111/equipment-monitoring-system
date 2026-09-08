@@ -1,6 +1,7 @@
 #include <iostream>
 #include "Equipment.h"
 #include <vector>
+# include <limits>
 
 using namespace std;
 
@@ -32,17 +33,68 @@ int main()
         cout << "Enter equipment name: ";
         getline(cin, name);
 
+        // FOR INVALID INPUT IN TEMP
         double temperature;
-        cout << "Enter temperature: ";
-        cin >> temperature;
 
+        while(true)
+        {
+            cout << "Enter temperature: ";
+            cin >> temperature;
+
+            if(cin.fail() || cin.peek() != '\n' || temperature < 0)
+            {
+                cin.clear();
+                cin.ignore(numeric_limits<streamsize>::max(), '\n');
+
+                cout << "Invalid input. Please enter a number." << endl;
+            }
+            else
+            {
+                break;
+            }
+        }
+
+        // FOR INVALID INPUT IN PRESSURE
         double pressure;
-        cout << "Enter pressure: ";
-        cin >> pressure;
 
+        while(true)
+        {
+            cout << "Enter pressure: ";
+            cin >> pressure;
+
+            if(cin.fail() || cin.peek() != '\n' || pressure < 0)
+            {
+                cin.clear();
+                cin.ignore(numeric_limits<streamsize>::max(), '\n');
+
+                cout << "Invalid input. Please enter a number." << endl;
+            }
+            else
+            {
+                break;
+            }
+        }
+
+        // FOR INVALID INPUT FOR VIBRATION
         double vibration;
-        cout << "Enter vibration: ";
-        cin >> vibration;
+
+        while(true)
+        {
+            cout << "Enter vibration: ";
+            cin >> vibration;
+
+            if(cin.fail() || cin.peek() != '\n' || vibration < 0)
+            {
+                cin.clear();
+                cin.ignore(numeric_limits<streamsize>::max(), '\n');
+
+                cout << "Invalid input. Please enter a number." << endl;
+            }
+            else
+            {
+                break;
+            }
+        }
 
         cin.ignore();
 
@@ -98,19 +150,65 @@ int main()
             cin >> choice;
 
             while(choice == 'y' || choice == 'Y'){
+
+                // FOR INVALID INPUT FOR UPDATED TEMP
                 double newTemperature;
+
+                while(true){
+                    cout << "Enter new temperature: ";
+                    cin >> newTemperature;
+
+                    if(cin.fail() || cin.peek() != '\n' || newTemperature < 0){
+                        cin.clear();
+                        cin.ignore(numeric_limits<streamsize>::max(), '\n');
+
+                        cout << "Invalid input. Please enter a number." << endl;
+                    }else{
+                        break;
+                    }
+                }
+
+                // INVALID USER INNPUT FOR UPDATED PRESSURE
                 double newPressure;
+
+                while(true)
+                {
+                    cout << "Enter new pressure: ";
+                    cin >> newPressure;
+
+                    if(cin.fail() || cin.peek() != '\n' || newPressure < 0)
+                    {
+                        cin.clear();
+                        cin.ignore(numeric_limits<streamsize>::max(), '\n');
+
+                        cout << "Invalid input. Please enter a number." << endl;
+                    }
+                    else
+                    {
+                        break;
+                    }
+                }
+
+                // INVALID USER  INPUT FOR UPDATED VIBRATION
                 double newVibration;
 
-                cout << "Enter new temperature: ";
-                cin >> newTemperature;
+                while(true)
+                {
+                    cout << "Enter new vibration: ";
+                    cin >> newVibration;
 
-                cout << "Enter new pressure: ";
-                cin >> newPressure;
+                    if(cin.fail() || cin.peek() != '\n' || newVibration < 0)
+                    {
+                        cin.clear();
+                        cin.ignore(numeric_limits<streamsize>::max(), '\n');
 
-                cout << "Enter new vibration: ";
-                cin >> newVibration;
-
+                        cout << "Invalid input. Please enter a number." << endl;
+                    }
+                    else
+                    {
+                        break;
+                    }
+                }
                 equipment.updateReadings(newTemperature, newPressure, newVibration);
 
                 cout << "\n===== UPDATED EQUIPMENT =====" << endl;
