@@ -40,6 +40,7 @@ public:
     void updateReadings(double newTemperature, double newPressure, double newVibration);
     void displayHistory() const;
     void displayStatusHistory() const;
+    void analyzeTrend() const;
 
 };
 

@@ -177,3 +177,41 @@ void Equipment::displayStatusHistory() const
         count++;
     }
 }
+
+void Equipment:: analyzeTrend() const
+{
+    if(history.empty()){
+        cout << "No previous readings available for trend analysis." << endl;
+        return;
+    }
+
+    double previousTemp = history.back().temperature;
+
+    if(previousTemp < temperature){
+        cout << "Temperature Trend: INCREASING" << endl;
+    }else if(previousTemp > temperature){
+        cout << "Temperature Trend: DECREASING" << endl;
+    }else{
+        cout << "Temperature Trend: STABLE" << endl;
+    }
+
+    double previousPressure = history.back().pressure;
+
+    if(previousPressure < pressure){
+        cout << "Pressure Trend: INCREASING" << endl;
+    }else if(previousPressure > pressure){
+        cout << "Pressure Trend: DECREASING" << endl;
+    }else{
+        cout << "Pressure Trend: STABLE" << endl;
+    }
+
+    double previousVibration = history.back().vibration;
+
+    if(previousVibration < vibration){
+        cout << "Vibration Trend: INCREASING" << endl;
+    }else if(previousVibration > vibration){
+        cout << "Vibration Trend: DECREASING" << endl;
+    }else{
+        cout << "Vibration Trend: STABLE" << endl;
+    }
+}

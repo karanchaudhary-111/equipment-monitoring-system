@@ -151,6 +151,17 @@ int main()
                 equipment.displayStatusHistory();
             }
 
+            char trendAnalysis;
+
+            cout << "\nDo you want to view trend analysis? (y/n): ";
+            cin >> trendAnalysis;
+
+            if(trendAnalysis == 'y' || trendAnalysis == 'Y')
+            {
+                cout << "\n===== TREND ANALYSIS =====" << endl;
+                equipment.analyzeTrend();
+            }
+
             found = true;
             break;
         }
