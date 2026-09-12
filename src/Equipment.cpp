@@ -178,40 +178,96 @@ void Equipment::displayStatusHistory() const
     }
 }
 
+string getTrend(double previous, double current)
+{
+    if(current > previous)
+    {
+        return "INCREASING";
+    }
+    else if(current < previous)
+    {
+        return "DECREASING";
+    }
+    else
+    {
+        return "STABLE";
+    }
+}
+
 void Equipment:: analyzeTrend() const
 {
-    if(history.empty()){
+    if(history.empty())
+    {
         cout << "No previous readings available for trend analysis." << endl;
         return;
     }
 
-    double previousTemp = history.back().temperature;
+    int choice;
 
-    if(previousTemp < temperature){
-        cout << "Temperature Trend: INCREASING" << endl;
-    }else if(previousTemp > temperature){
-        cout << "Temperature Trend: DECREASING" << endl;
-    }else{
-        cout << "Temperature Trend: STABLE" << endl;
-    }
+    cout << "\n1. Latest Trend" << endl;
+    cout << "2. Overall Trend" << endl;
+    cout << "Enter your choice: ";
+    cin >> choice;
 
-    double previousPressure = history.back().pressure;
+    if(choice == 1)
+    {
+        double previousTemp = history.back().temperature;
+        double previousPressure = history.back().pressure;
+        double previousVibration = history.back().vibration;
 
-    if(previousPressure < pressure){
-        cout << "Pressure Trend: INCREASING" << endl;
-    }else if(previousPressure > pressure){
-        cout << "Pressure Trend: DECREASING" << endl;
-    }else{
-        cout << "Pressure Trend: STABLE" << endl;
-    }
+        cout << "\n===== LATEST TREND =====" << endl;
 
-    double previousVibration = history.back().vibration;
+        cout << "Temperature Trend: "
+            << getTrend(previousTemp, temperature) << endl;
 
-    if(previousVibration < vibration){
-        cout << "Vibration Trend: INCREASING" << endl;
-    }else if(previousVibration > vibration){
-        cout << "Vibration Trend: DECREASING" << endl;
-    }else{
-        cout << "Vibration Trend: STABLE" << endl;
+        cout << "Pressure Trend: "
+            << getTrend(previousPressure, pressure) << endl;
+
+        cout << "Vibration Trend: "
+            << getTrend(previousVibration, vibration) << endl;
+        }
+
+    else if(choice == 2)
+    {
+        // OVERALL TREND CODE HERE
+        int n = history.size();
+        int i = 0;
+
+        while(i < n - 1)
+        {
+            double currentTemp = history[i].temperature;
+            double nextTemp = history[i + 1].temperature;
+
+            cout << "\nReading " << i + 1 << " -> Reading " << i + 2 << endl;
+            cout << "Temperature Trend: " << getTrend(currentTemp, nextTemp) << endl;
+
+            double currentPressure = history[i].pressure;
+            double nextPressure = history[i + 1].pressure;
+            cout << "Pressure Trend: " << getTrend(currentPressure, nextPressure) << endl;
+
+
+            double currentVibration = history[i].vibration;
+            double nextVibration = history[i + 1].vibration;
+            cout << "Vibration Trend: " << getTrend(currentVibration, nextVibration) << endl;
+
+            i++;
+        }
+
+        cout << "\nReading " << n << " -> Current Reading" << endl;
+
+        double lastTemp = history.back().temperature;
+        cout << "Temperature Trend: " << getTrend(lastTemp, temperature) << endl;
+
+
+        double lastPressure = history.back().pressure;
+        cout << "Pressure Trend: " << getTrend(lastPressure, pressure) << endl;
+
+
+        double lastVibration = history.back().vibration;
+        cout << "Vibration Trend: " << getTrend(lastVibration, vibration) << endl;
+
+    }else
+    {
+        cout << "Invalid choice." << endl;
     }
 }
