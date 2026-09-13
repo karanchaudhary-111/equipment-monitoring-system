@@ -1,5 +1,10 @@
-# this is ignore part in my project.
+# THIS FILE IS CREATED TO IGNORE SOMETHING IN MY PROJECT
 
+# THAT HELP TO RUN NO NEED TO PUSH IN GIT HUB
 *.exe
+
+# OUTPUT REPORT ONLY
 *equipment_report.txt
+
+# for LOAD CSV FILE THAT WORK IS DATA STORAGE
 *equipment_data.csv
