@@ -2,9 +2,12 @@
 #include "Equipment.h"
 #include <vector>
 # include <limits>
+# include <fstream>
+#include <sstream>
 
 using namespace std;
 
+// FOR GETTING VALID INPUT FROM USERS
 double getValidInput(string prompt)
 {
     double value;
@@ -27,9 +30,62 @@ double getValidInput(string prompt)
     }
 }
 
+//  PERSISTED DATA STORAGE
+void loadFromCSV(vector<Equipment>& equipmentList)
+{
+    ifstream file("equipment_data.csv");
+
+    string line;
+
+    while(getline(file, line))
+    {
+        stringstream ss(line);
+
+        string name;
+        getline(ss, name, ',');
+
+        string tempStr;
+        getline(ss, tempStr, ',');
+        double temperature = stod(tempStr);
+
+        string pressureStr;
+        getline(ss, pressureStr, ',');
+        double pressure = stod(pressureStr);
+
+        string vibrationStr;
+        getline(ss, vibrationStr, ',');
+        double vibration = stod(vibrationStr);
+
+        string status;
+        getline(ss, status);
+
+        Equipment loadedEquipment(name, temperature, pressure, vibration);
+        equipmentList.push_back(loadedEquipment);
+    }
+}
+
+// SAVE ALL LOADED CSV EQUIPMENTS
+void saveAllToCSV(const vector<Equipment>& equipmentList)
+{
+    ofstream file("equipment_data.csv");
+
+    for(const Equipment &equipment : equipmentList)
+    {
+        file << equipment.getName() << ","
+             << equipment.getTemp() << ","
+             << equipment.getPressure() << ","
+             << equipment.getVibration() << ","
+             << equipment.getStatus() << endl;
+    }
+
+    file.close();
+}
+
 int main()
 {
     vector<Equipment> equipmentList;
+
+    loadFromCSV(equipmentList);
 
     int normalCount  = 0;
     int warningCount = 0;
@@ -65,6 +121,7 @@ int main()
         Equipment newEquipment(name, temperature, pressure, vibration);
 
         equipmentList.push_back(newEquipment);
+
     }
     cout << endl << endl;
 
@@ -263,5 +320,7 @@ int main()
     cout << "Lowest Temperature: " << lowestTemperature << " C" << endl;
 
 
+    // FOR ALL EQUIPMENT AFTER UPDATE THEN STORE 
+    saveAllToCSV(equipmentList);
     return 0;
 }
