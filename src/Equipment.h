@@ -40,7 +40,15 @@ public:
     void updateReadings(double newTemperature, double newPressure, double newVibration);
     void displayHistory() const;
     void displayStatusHistory() const;
+
+    // USED TO RESTORE EQUIPMENTS
     void analyzeTrend() const;
+
+    // Used when restoring old readings from saved data
+    void addHistoryReading(Reading reading);
+
+    // HISTORY  IS IN PRIVATE THAT'S WHY  I USED THIS IN PUBLIC TO ACCESS
+    vector<Reading> getHistory() const;
 
 };
 

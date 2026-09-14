@@ -30,7 +30,7 @@ double getValidInput(string prompt)
     }
 }
 
-//  PERSISTED DATA STORAGE
+//  USED TO RESTORE THE  EQUIPMENT PERMANENT 
 void loadFromCSV(vector<Equipment>& equipmentList)
 {
     ifstream file("equipment_data.csv");
@@ -81,11 +81,83 @@ void saveAllToCSV(const vector<Equipment>& equipmentList)
     file.close();
 }
 
+// LOAD HISTORY FROM CSV 
+void loadHistoryFromCSV(vector<Equipment>& equipmentList)
+{
+    ifstream file("equipment_history.csv");
+
+    string line;
+
+    while(getline(file, line))
+    {
+        stringstream ss(line);
+        string name;
+        getline(ss, name, ',');
+
+        string tempStr;
+        getline(ss, tempStr, ',');
+        double temperature = stod(tempStr);
+
+        string pressureStr;
+        getline(ss, pressureStr, ',');
+        double pressure = stod(pressureStr);
+
+        string vibrationStr;
+        getline(ss, vibrationStr, ',');
+        double vibration = stod(vibrationStr);
+
+        string status;
+        getline(ss, status);
+
+        // CREATE READING OBJECT FROM LOADED CSV
+        Reading reading;
+
+        reading.temperature = temperature;
+        reading.pressure = pressure;
+        reading.vibration = vibration;
+        reading.status = status;
+
+        // Find which equipment this history belongs to
+        for(Equipment &equipment : equipmentList)
+        {
+            if(equipment.getName() == name)
+            {
+                equipment.addHistoryReading(reading);
+                break;
+            }
+        }
+
+    }
+}
+
+// USED TO RESTORE THE HISTORY JUST LIKE EQUIPMENT CSV
+void saveHistoryToCSV(const vector<Equipment>& equipmentList)
+{
+    ofstream file("equipment_history.csv");
+
+    for(const Equipment &equipment : equipmentList)
+    {
+        vector<Reading> history = equipment.getHistory();
+
+        for(const Reading &reading : history)
+        {
+            file << equipment.getName() << ","
+                 << reading.temperature << ","
+                 << reading.pressure << ","
+                 << reading.vibration << ","
+                 << reading.status << endl;
+        }
+    }
+
+    file.close();
+}
+
 int main()
 {
     vector<Equipment> equipmentList;
 
     loadFromCSV(equipmentList);
+    loadHistoryFromCSV(equipmentList);
 
     int normalCount  = 0;
     int warningCount = 0;
@@ -320,7 +392,11 @@ int main()
     cout << "Lowest Temperature: " << lowestTemperature << " C" << endl;
 
 
-    // FOR ALL EQUIPMENT AFTER UPDATE THEN STORE 
+    // SAVE CURRENT EQUIPMENT STATE
     saveAllToCSV(equipmentList);
+
+    // SAVE PREVIOUS READING HISTORY
+    saveHistoryToCSV(equipmentList);
+
     return 0;
 }

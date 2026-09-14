@@ -271,3 +271,15 @@ void Equipment:: analyzeTrend() const
         cout << "Invalid choice." << endl;
     }
 }
+
+// USED TO RESTORE HISTORY AFTER CLOSE WINDOW
+void Equipment::addHistoryReading(Reading reading)
+{
+    history.push_back(reading);
+}
+
+// USED TO ACCESS HISTORY IN PUBLIC
+vector<Reading> Equipment::getHistory() const
+{
+    return history;
+}
