@@ -11,3 +11,6 @@
 
 # for LOAD CSV FILE THAT WORK IS HISTORY STORAGE AFTER CLOSE 
 *equipment_history.csv
+
+# for LOAD CSV FILE THAT WORK IS STATUS HISTORY STORAGE AFTER CLOSE 
+*equipment_status_history.csv
