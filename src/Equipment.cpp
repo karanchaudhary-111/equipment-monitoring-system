@@ -178,6 +178,7 @@ void Equipment::displayStatusHistory() const
     }
 }
 
+// 
 string getTrend(double previous, double current)
 {
     if(current > previous)
@@ -282,4 +283,16 @@ void Equipment::addHistoryReading(Reading reading)
 vector<Reading> Equipment::getHistory() const
 {
     return history;
+}
+
+// USED TO ACCESS STATUS HISTORY IN PUBLIC
+vector<string> Equipment::getStatusHistory() const
+{
+    return statusHistory;
+}
+
+// USED TO RESTORE STATUS HISTORY
+void Equipment::addStatusHistory(string transition)
+{
+    statusHistory.push_back(transition);
 }

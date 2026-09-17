@@ -152,12 +152,60 @@ void saveHistoryToCSV(const vector<Equipment>& equipmentList)
     file.close();
 }
 
+// CONVERT THIS FILE INTO CSV
+void saveStatusHistoryToCSV(const vector<Equipment>& equipmentList)
+{
+    ofstream file("equipment_status_history.csv");
+
+    for(const Equipment &equipment : equipmentList)
+    {
+        vector<string> statusHistory = equipment.getStatusHistory();
+
+        for(const string &transition : statusHistory)
+        {
+            file << equipment.getName()
+                 << ","
+                 << transition
+                 << endl;
+        }
+    }
+}
+
+// LOAD FROM CSV STATUS HISTORY
+void loadStatusHistoryFromCSV(vector<Equipment>& equipmentList)
+{
+    ifstream file("equipment_status_history.csv");
+
+    string line;
+
+    while(getline(file, line))
+    {
+        stringstream ss(line);
+
+        string name;
+        getline(ss, name, ',');
+
+        string transition;
+        getline(ss, transition);
+
+        for(Equipment &equipment : equipmentList)
+        {
+            if(equipment.getName() == name)
+            {
+                equipment.addStatusHistory(transition);
+                break;
+            }
+        }
+    }
+}
+
 int main()
 {
     vector<Equipment> equipmentList;
 
     loadFromCSV(equipmentList);
     loadHistoryFromCSV(equipmentList);
+    loadStatusHistoryFromCSV(equipmentList);
 
     int normalCount  = 0;
     int warningCount = 0;
@@ -397,6 +445,9 @@ int main()
 
     // SAVE PREVIOUS READING HISTORY
     saveHistoryToCSV(equipmentList);
+
+    // SAVE PREVIOUS STATUS HISTORY
+    saveStatusHistoryToCSV(equipmentList);
 
     return 0;
 }
