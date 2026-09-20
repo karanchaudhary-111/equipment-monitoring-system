@@ -216,8 +216,8 @@ int main()
     cout << "Enter number of equipments: ";
     cin >> n;
     
-    if(n <= 0){
-        cout << "Number of Equipment should be greater than 0," << endl;
+    if(n < 0){
+        cout << "Number of Equipment cannot be negative." << endl;
         return 0;
     }
     cin.ignore();
@@ -243,6 +243,14 @@ int main()
         equipmentList.push_back(newEquipment);
 
     }
+
+    // CHECK THE VECTOR IS  EMPTY OR NOT AFTER UPDATE THEIR INPUTS
+    if(equipmentList.empty())
+    {
+        cout << "\nNo equipment available." << endl;
+        return 0;
+    }
+
     cout << endl << endl;
 
     vector<string> criticalEquipment;
@@ -265,9 +273,9 @@ int main()
 
     bool  found = false;
 
-    for(Equipment & equipment : equipmentList){
+    for(int idx = 0; idx < equipmentList.size(); idx++){
 
-        string equipmentName = equipment.getName();
+        string equipmentName = equipmentList[idx].getName();
 
         for(int i = 0; i < equipmentName.size(); i++)
         {
@@ -282,7 +290,7 @@ int main()
         if(equipmentName == searchName){
 
             cout << "\n===== SEARCH RESULT =====" << endl;
-            equipment.display();
+            equipmentList[idx].display();
 
             char choice;
 
@@ -297,10 +305,10 @@ int main()
                 double newPressure = getValidInput("Enter New Pressure: ");
                 double newVibration = getValidInput("Enter New Vibration: ");
 
-                equipment.updateReadings(newTemperature, newPressure, newVibration);
+                equipmentList[idx].updateReadings(newTemperature, newPressure, newVibration);
 
                 cout << "\n===== UPDATED EQUIPMENT =====" << endl;
-                equipment.display();
+                equipmentList[idx].display();
 
                 cout << "\nDo you want to update again? (y/n): ";
                 cin >> choice;
@@ -314,9 +322,10 @@ int main()
             if(historyChoice == 'y' || historyChoice == 'Y'){
                 cout << "\n===== READING HISTORY =====" << endl;
 
-                equipment.displayHistory();
+                equipmentList[idx].displayHistory();
             }
 
+            // SHOW THE STATUS HISTORY OF EQUIPMENT CHANGES
             char statusHistoryChoice;
 
             cout << "\nDo you want to view status change history? (y/n): ";
@@ -325,9 +334,10 @@ int main()
             if(statusHistoryChoice == 'y' || statusHistoryChoice == 'Y')
             {
                 cout << "\n===== STATUS CHANGE HISTORY =====" << endl;
-                equipment.displayStatusHistory();
+                equipmentList[idx].displayStatusHistory();
             }
 
+            // FOR TREND ANALYSIS TO VIEW OR NOT
             char trendAnalysis;
 
             cout << "\nDo you want to view trend analysis? (y/n): ";
@@ -336,7 +346,19 @@ int main()
             if(trendAnalysis == 'y' || trendAnalysis == 'Y')
             {
                 cout << "\n===== TREND ANALYSIS =====" << endl;
-                equipment.analyzeTrend();
+                equipmentList[idx].analyzeTrend();
+            }
+
+            // FOR DELETION OF EQUIPMENT IF I WANT
+            char deleteChoice;
+
+            cout << "\nDo you want to delete this equipment? (y/n): ";
+            cin >> deleteChoice;
+
+            if(deleteChoice == 'y' || deleteChoice == 'Y')
+            {
+                equipmentList.erase(equipmentList.begin() + idx);
+                cout << "Equipment deleted successfully." << endl;
             }
 
             found = true;
@@ -346,6 +368,8 @@ int main()
     if(!found){
         cout << "Equipment is not found." << endl;
     }
+
+
 
     // FIND TOTAL MEASUREMENT OF ALL READINGS
     double totalTemperature = 0;
