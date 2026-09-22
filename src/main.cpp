@@ -199,6 +199,19 @@ void loadStatusHistoryFromCSV(vector<Equipment>& equipmentList)
     }
 }
 
+// CONVERT THE EQUIPMENT NAME IN LOWERCASE
+string convToLower(string name){
+    int n = name.size();
+
+    for(int i = 0; i < n; i++){
+        if(name[i] >= 'A' && name[i] <= 'Z'){
+            name[i] = name[i] - 'A' + 'a';
+        }
+    }
+
+    return name;
+}
+
 int main()
 {
     vector<Equipment> equipmentList;
@@ -228,8 +241,30 @@ int main()
         cout << "\nEnter details for Equipment " << i + 1 << endl;
 
         string name;
-        cout << "Enter equipment name: ";
-        getline(cin, name);
+        bool duplicateName = false;
+
+        // CHECK DUPLUICATE TILL UNIQUE NAME
+        do{
+            duplicateName = false;
+            
+            cout << "Enter equipment name: ";
+            getline(cin, name);
+
+            string newName = convToLower(name);
+
+            for(Equipment& equipment : equipmentList){
+
+                string existingName = convToLower(equipment.getName());
+
+                if(existingName == newName){
+                    duplicateName = true;
+                    cout << "Equipment already exists. Please enter a different name." << endl << endl;
+                    break;
+                }
+            }
+
+        }while(duplicateName);
+
 
         // USING FUNC FOR GET VALID INPUT
         double temperature = getValidInput("Enter temperature: ");
@@ -262,30 +297,13 @@ int main()
     getline(cin, searchName);
 
     // TO CHANGE LOWERCASE OF SEARCHNAME
-    for(int i = 0; i < searchName.size(); i++)
-    {
-        if(searchName[i] >= 'A' && searchName[i] <= 'Z')
-        {
-            char ch = searchName[i] - 'A' + 'a';
-            searchName[i] = ch;
-        }
-    }
+    searchName = convToLower(searchName);
 
     bool  found = false;
 
     for(int idx = 0; idx < equipmentList.size(); idx++){
 
-        string equipmentName = equipmentList[idx].getName();
-
-        for(int i = 0; i < equipmentName.size(); i++)
-        {
-            // TO CHANGE STORED EQUIPMENT NAME
-            if(equipmentName[i] >= 'A' && equipmentName[i] <= 'Z')
-            {
-                char ch = equipmentName[i] - 'A' + 'a';
-                equipmentName[i] = ch;
-            }
-        }
+        string equipmentName = convToLower(equipmentList[idx].getName());
 
         if(equipmentName == searchName){
 
@@ -370,6 +388,18 @@ int main()
     }
 
 
+    if(equipmentList.empty()){
+        // SAVE CURRENT EQUIPMENT STATE
+        saveAllToCSV(equipmentList);
+
+        // SAVE PREVIOUS READING HISTORY
+        saveHistoryToCSV(equipmentList);
+
+        // SAVE PREVIOUS STATUS HISTORY
+        saveStatusHistoryToCSV(equipmentList);
+
+        return 0;
+    }
 
     // FIND TOTAL MEASUREMENT OF ALL READINGS
     double totalTemperature = 0;
