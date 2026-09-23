@@ -246,9 +246,29 @@ int main()
         // CHECK DUPLUICATE TILL UNIQUE NAME
         do{
             duplicateName = false;
+
+            // REMOVE THE INVALID NAME LIKE SPACE AND EMPTY NAME
+            bool hasNonSpace = false;
             
-            cout << "Enter equipment name: ";
-            getline(cin, name);
+            do{
+
+                hasNonSpace = false;
+
+                cout << "Enter equipment name: ";
+                getline(cin, name);
+
+                for(int i = 0; i < name.size(); i++){
+                    if(name[i] != ' '){
+                        hasNonSpace = true;
+                        break;
+                    }
+                }
+                if(name.empty() || !hasNonSpace)
+                {
+                    cout << "Invalid equipment name. Name cannot be empty or contain only spaces." << endl;
+                }
+
+            }while(name.empty() || !hasNonSpace);
 
             string newName = convToLower(name);
 
