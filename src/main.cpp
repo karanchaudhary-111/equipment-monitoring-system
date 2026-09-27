@@ -212,6 +212,22 @@ string convToLower(string name){
     return name;
 }
 
+// Returns the index of the equipment by name (case-insensitive), or -1 if not found.
+int findEquipment(vector<Equipment>& equipmentList, string name)
+{
+    for(int i = 0; i < equipmentList.size(); i++)
+    {
+        string existingName = equipmentList[i].getName();
+
+        if(convToLower(name) == convToLower(existingName))
+        {
+            return i;
+        }
+    }
+
+    return -1;
+}
+
 int main()
 {
     vector<Equipment> equipmentList;
@@ -240,6 +256,21 @@ int main()
 
         cout << "\nEnter your choice: ";
         cin >> choice;
+
+        if(cin.fail())
+        {
+            cin.clear();
+            cin.ignore(numeric_limits<streamsize>::max(), '\n');
+
+            cout << "Invalid input. Please enter a number from 1 to 10." << endl;
+            continue;
+        }
+
+        if(choice < 1 || choice > 10)
+        {
+            cout << "Invalid choice. Please enter a number from 1 to 10." << endl;
+            continue;
+        }
 
         switch(choice)
         {
@@ -306,22 +337,16 @@ int main()
 
                         } while(name.empty() || !hasNonSpace);
 
-                        string newName = convToLower(name);
+                        // CHECK IF EQUIPMENT NAME ALREADY EXISTS
+                        int index = findEquipment(equipmentList, name);
 
-                        for(Equipment& equipment : equipmentList)
+                        if(index != -1)
                         {
-                            string existingName = convToLower(equipment.getName());
+                            duplicateName = true;
 
-                            if(existingName == newName)
-                            {
-                                duplicateName = true;
-
-                                cout << "Equipment already exists. "
-                                    << "Please enter a different name."
-                                    << endl << endl;
-
-                                break;
-                            }
+                            cout << "Equipment already exists. "
+                                << "Please enter a different name."
+                                << endl << endl;
                         }
 
                     } while(duplicateName);
@@ -392,29 +417,14 @@ int main()
                 cout << "Enter equipment name to search: ";
                 getline(cin, searchName);
 
-                // CONVERT SEARCH NAME TO LOWERCASE
-                searchName = convToLower(searchName);
+                int index = findEquipment(equipmentList, searchName);
 
-                bool found = false;
-
-                // SEARCH EQUIPMENT
-                for(const Equipment& equipment : equipmentList)
+                if(index != -1)
                 {
-                    string existingName = convToLower(equipment.getName());
-
-                    if(existingName == searchName)
-                    {
-                        cout << "\n===== SEARCH RESULT =====" << endl;
-
-                        equipment.display();
-
-                        found = true;
-                        break;
-                    }
+                    cout << "\n===== SEARCH RESULT =====" << endl;
+                    equipmentList[index].display();
                 }
-
-                // IF EQUIPMENT IS NOT FOUND
-                if(!found)
+                else
                 {
                     cout << "Equipment not found." << endl;
                 }
@@ -440,56 +450,41 @@ int main()
                 cout << "Enter equipment name to search: ";
                 getline(cin, updateName);
 
-                // CONVERT UPDATE NAME TO LOWERCASE
-                updateName = convToLower(updateName);
-
-                bool found = false;
-
-                // SEARCH EQUIPMENT
-                for(Equipment& equipment : equipmentList)
-                {
-                    string existingName = convToLower(equipment.getName());
-
-                    if(existingName == updateName)
-                    {
-                        // GET NEW READINGS
-                        double newTemperature =
-                            getValidInput("Enter New Temperature: ");
-
-                        double newPressure =
-                            getValidInput("Enter New Pressure: ");
-
-                        double newVibration =
-                            getValidInput("Enter New Vibration: ");
-
-                        // UPDATE EQUIPMENT
-                        equipment.updateReadings(
-                            newTemperature,
-                            newPressure,
-                            newVibration
-                        );
-
-                        cout << "\n===== UPDATED EQUIPMENT =====" << endl;
-                        equipment.display();
-
-                        found = true;
-                        break;   
-                    }
-                }
+                // FIND THE EQUIPMENT AND GET ITS INDEX
+                int index = findEquipment(equipmentList, updateName);
 
                 // IF EQUIPMENT IS NOT FOUND
-                if(!found)
+                if(index == -1)
                 {
                     cout << "Equipment not found." << endl;
+                    break;
                 }
 
-                 // SAVE UPDATED DATA
-                if(found)
-                {
-                    saveAllToCSV(equipmentList);
-                    saveHistoryToCSV(equipmentList);
-                    saveStatusHistoryToCSV(equipmentList);
-                }
+                // TAKE NEW READINGS
+                double newTemperature =
+                    getValidInput("Enter New Temperature: ");
+
+                double newPressure =
+                    getValidInput("Enter New Pressure: ");
+
+                double newVibration =
+                    getValidInput("Enter New Vibration: ");
+
+                // UPDATED READINGS OF THE SELECTED EQUIPMENT
+                equipmentList[index].updateReadings(
+                    newTemperature,
+                    newPressure,
+                    newVibration
+                );
+
+                // DISPLAY UPDATED EQUIPMENT
+                cout << "\n===== UPDATED EQUIPMENT =====" << endl;
+                equipmentList[index].display();
+
+                // SAVE UPDATED DATA AND HISTORY
+                saveAllToCSV(equipmentList);
+                saveHistoryToCSV(equipmentList);
+                saveStatusHistoryToCSV(equipmentList);
 
                 break;
             }
@@ -511,42 +506,26 @@ int main()
                 cout << "Enter equipment name to delete: ";
                 getline(cin, deleteName);
 
-                // CONVERT NAME TO LOWERCASE
-                deleteName = convToLower(deleteName);
+                // FIND THE EQUIPMENT AND GET ITS INDEX
+                int index = findEquipment(equipmentList, deleteName);
 
-                bool found = false;
-
-                // SEARCH EQUIPMENT
-                for(int idx = 0; idx < equipmentList.size(); idx++)
-                {
-                    string existingName =
-                        convToLower(equipmentList[idx].getName());
-
-                    if(existingName == deleteName)
-                    {
-                        // DELETE EQUIPMENT
-                        equipmentList.erase(equipmentList.begin() + idx);
-
-                        cout << "Equipment deleted successfully." << endl;
-
-                        found = true;
-                        break;
-                    }
-                }
-
-                // EQUIPMENT NOT FOUND
-                if(!found)
+                // IF EQUIPMENT IS NOT FOUND
+                if(index == -1)
                 {
                     cout << "Equipment not found." << endl;
+                    break;
                 }
 
-                // SAVE UPDATED DATA AFTER DELETION
-                if(found)
-                {
-                    saveAllToCSV(equipmentList);
-                    saveHistoryToCSV(equipmentList);
-                    saveStatusHistoryToCSV(equipmentList);
-                }
+                // DELETE EQUIPMENT FROM VECTOR
+                equipmentList.erase(equipmentList.begin() + index);
+
+                cout << "Equipment deleted successfully." << endl;
+
+                // Save remaining equipment and histories
+                saveAllToCSV(equipmentList);
+                saveHistoryToCSV(equipmentList);
+                saveStatusHistoryToCSV(equipmentList);
+
 
                 break;
             }
@@ -673,32 +652,19 @@ int main()
                 cout << "Enter equipment name to view reading history: ";
                 getline(cin, historyName);
 
-                // CONVERT SEARCH NAME TO LOWERCASE
-                historyName = convToLower(historyName);
+                // FIND THE EQUIPMENT AND GET ITS INDEX
+                int index = findEquipment(equipmentList, historyName);
 
-                bool found = false;
-
-                // SEARCH EQUIPMENT
-                for(const Equipment& equipment : equipmentList)
-                {
-                    string existingName =
-                        convToLower(equipment.getName());
-
-                    if(existingName == historyName)
-                    {
-                        cout << "\n===== READING HISTORY =====" << endl;
-
-                        equipment.displayHistory();
-
-                        found = true;
-                        break;
-                    }
-                }
-                // EQUIPMENT NOT FOUND
-                if(!found)
+                // IF EQUIPMENT IS NOT FOUND
+                if(index == -1)
                 {
                     cout << "Equipment not found." << endl;
+                    break;
                 }
+
+                // DISPLAY READING HISTORY OF SELECTED EQUIPMENT
+                cout << "\n===== READING HISTORY =====" << endl;
+                equipmentList[index].displayHistory();
 
                 break;
             }
@@ -720,33 +686,19 @@ int main()
                 cout << "Enter equipment name to view status change history: ";
                 getline(cin, statusHistoryName);
 
-                // CONVERT SEARCH NAME TO LOWERCASE
-                statusHistoryName = convToLower(statusHistoryName);
+                // FIND THE EQUIPMENT AND GET ITS INDEX
+                int index = findEquipment(equipmentList, statusHistoryName);
 
-                bool found = false;
-
-                // SEARCH EQUIPMENT
-                for(const Equipment& equipment : equipmentList)
-                {
-                    string existingName =
-                        convToLower(equipment.getName());
-
-                    if(existingName == statusHistoryName)
-                    {
-                        cout << "\n===== STATUS CHANGE HISTORY =====" << endl;
-
-                        equipment.displayStatusHistory();
-
-                        found = true;
-                        break;
-                    }
-                }
-
-                // EQUIPMENT NOT FOUND
-                if(!found)
+                // IF EQUIPMENT IS NOT FOUND
+                if(index == -1)
                 {
                     cout << "Equipment not found." << endl;
+                    break;
                 }
+
+                // DISPLAY STATUS CHANGE HISTORY OF SELECTED EQUIPMENT
+                cout << "\n===== STATUS CHANGE HISTORY =====" << endl;
+                equipmentList[index].displayStatusHistory();
                 break;
             }
 
@@ -767,33 +719,19 @@ int main()
                 cout << "Enter equipment name to view trend analysis: ";
                 getline(cin, trendName);
 
-                // CONVERT SEARCH NAME TO LOWERCASE
-                trendName = convToLower(trendName);
+                 // FIND THE EQUIPMENT AND GET ITS INDEX
+                int index = findEquipment(equipmentList, trendName);
 
-                bool found = false;
-
-                // SEARCH EQUIPMENT
-                for(const Equipment& equipment : equipmentList)
-                {
-                    string existingName =
-                        convToLower(equipment.getName());
-
-                    if(existingName == trendName)
-                    {
-                        cout << "\n===== TREND ANALYSIS =====" << endl;
-
-                        equipment.analyzeTrend();
-
-                        found = true;
-                        break;
-                    }
-                }
-
-                // EQUIPMENT NOT FOUND
-                if(!found)
+                // CHECK IF EQUIPMENT IS NOT FOUND
+                if(index == -1)
                 {
                     cout << "Equipment not found." << endl;
+                    break;
                 }
+
+                // DISPLAY TREND ANALYSIS OF SELECTED EQUIPMENT
+                cout << "\n===== TREND ANALYSIS =====" << endl;
+                equipmentList[index].analyzeTrend();
                 break;
             }
 
