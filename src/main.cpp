@@ -44,20 +44,54 @@ void loadFromCSV(vector<Equipment>& equipmentList)
         string name;
         getline(ss, name, ',');
 
+        bool hasNonSpace = false;
+
+        for(int i = 0; i < name.size(); i++)
+        {
+            if(name[i] != ' ')
+            {
+                hasNonSpace = true;
+                break;
+            }
+        }
+
+        if(name.empty() || !hasNonSpace)
+        {
+            cout << "Invalid equipment name in CSV. Skipping row." << endl;
+            continue;
+        }
+
         string tempStr;
         getline(ss, tempStr, ',');
-        double temperature = stod(tempStr);
 
         string pressureStr;
         getline(ss, pressureStr, ',');
-        double pressure = stod(pressureStr);
 
         string vibrationStr;
         getline(ss, vibrationStr, ',');
-        double vibration = stod(vibrationStr);
+
+        double temperature;
+        double pressure;
+        double vibration;
+
+        try
+        {
+            temperature = stod(tempStr);
+            pressure = stod(pressureStr);
+            vibration = stod(vibrationStr);
+        }
+        catch(...)
+        {
+            cout << "Invalid numeric data in CSV. Skipping row." << endl;
+            continue;
+        }
 
         string status;
-        getline(ss, status);
+        if(!getline(ss, status))
+        {
+            cout << "Missing data in CSV. Skipping row." << endl;
+            continue;
+        }
 
         Equipment loadedEquipment(name, temperature, pressure, vibration);
         equipmentList.push_back(loadedEquipment);
@@ -94,20 +128,55 @@ void loadHistoryFromCSV(vector<Equipment>& equipmentList)
         string name;
         getline(ss, name, ',');
 
+        bool hasNonSpace = false;
+
+        for(int i = 0; i < name.size(); i++)
+        {
+            if(name[i] != ' ')
+            {
+                hasNonSpace = true;
+                break;
+            }
+        }
+
+        if(name.empty() || !hasNonSpace)
+        {
+            cout << "Invalid equipment name in history CSV. Skipping row." << endl;
+            continue;
+        }
+
         string tempStr;
         getline(ss, tempStr, ',');
-        double temperature = stod(tempStr);
 
         string pressureStr;
         getline(ss, pressureStr, ',');
-        double pressure = stod(pressureStr);
 
         string vibrationStr;
         getline(ss, vibrationStr, ',');
-        double vibration = stod(vibrationStr);
+
+        double temperature;
+        double pressure;
+        double vibration;
+
+        try
+        {
+            temperature = stod(tempStr);
+            pressure = stod(pressureStr);
+            vibration = stod(vibrationStr);
+        }
+        catch(...)
+        {
+            cout << "Invalid numeric data in history CSV. Skipping row." << endl;
+            continue;
+        }
 
         string status;
-        getline(ss, status);
+        
+        if(!getline(ss, status))
+        {
+            cout << "Missing data in history CSV. Skipping row." << endl;
+            continue;
+        }
 
         // CREATE READING OBJECT FROM LOADED CSV
         Reading reading;
@@ -152,7 +221,7 @@ void saveHistoryToCSV(const vector<Equipment>& equipmentList)
     file.close();
 }
 
-// LOAD FROM CSV STATUS HISTORY
+// LOAD STATUS HISTORY FROM CSV 
 void loadStatusHistoryFromCSV(vector<Equipment>& equipmentList)
 {
     ifstream file("equipment_status_history.csv");
@@ -166,8 +235,30 @@ void loadStatusHistoryFromCSV(vector<Equipment>& equipmentList)
         string name;
         getline(ss, name, ',');
 
+        bool hasNonSpace = false;
+
+        for(int i = 0; i < name.size(); i++)
+        {
+            if(name[i] != ' ')
+            {
+                hasNonSpace = true;
+                break;
+            }
+        }
+
+        if(name.empty() || !hasNonSpace)
+        {
+            cout << "Invalid equipment name in Status History CSV. Skipping row." << endl;
+            continue;
+        }
+
         string transition;
-        getline(ss, transition);
+
+        if(!getline(ss, transition))
+        {
+            cout << "Missing transition in Status History CSV. Skipping row." << endl;
+            continue;
+        }
 
         for(Equipment &equipment : equipmentList)
         {
@@ -397,7 +488,7 @@ int main()
                 }
 
                 break;
-            }
+            }// CASE 2 IS COMPLETED
 
             case 3: // ==== SEARCH EQUIPMENT ====
             {
@@ -487,7 +578,7 @@ int main()
                 saveStatusHistoryToCSV(equipmentList);
 
                 break;
-            }
+            }// CASE 4 IS COMPLETED
 
             case 5: // ==== DELETE EQUIPMENT ====
             {
@@ -528,7 +619,7 @@ int main()
 
 
                 break;
-            }
+            }// CASE 5 IS COMPLETED
 
             case 6: // ==== SHOW SUMMARY DASHBOARD ====
             {
@@ -633,7 +724,7 @@ int main()
                 }
 
                 break;
-            }
+            }// CASE 6 IS COMPLETED
 
             case 7: // ==== SHOW READING HISTORY ====
             {
@@ -667,7 +758,7 @@ int main()
                 equipmentList[index].displayHistory();
 
                 break;
-            }
+            }// CASE 7 IS COMPLETED
 
             case 8: // ==== SHOW  STATUS CHANGE HISTORY ====
             {
@@ -700,7 +791,7 @@ int main()
                 cout << "\n===== STATUS CHANGE HISTORY =====" << endl;
                 equipmentList[index].displayStatusHistory();
                 break;
-            }
+            }// CASE 8 IS COMPLETED
 
             case 9: // ==== SHOW TREND ANALYSIS ====
             {
@@ -733,7 +824,7 @@ int main()
                 cout << "\n===== TREND ANALYSIS =====" << endl;
                 equipmentList[index].analyzeTrend();
                 break;
-            }
+            }// CASE 9 IS COMPLETED
 
             case 10:
                 cout << "\nExiting Program..." << endl;
