@@ -49,6 +49,11 @@ void loadFromCSV(vector<Equipment>& equipmentList)
 {
     ifstream file("equipment_data.csv");
 
+    if(!file.is_open())
+    {
+        return;
+    }
+
     string line;
 
     while(getline(file, line))
@@ -79,9 +84,31 @@ void loadFromCSV(vector<Equipment>& equipmentList)
 
         try
         {
-            temperature = stod(tempStr);
-            pressure = stod(pressureStr);
-            vibration = stod(vibrationStr);
+            size_t pos; // DETECT THE SIZE ONNLY FOR NUMERIC
+
+            temperature = stod(tempStr, &pos);
+
+            if(pos != tempStr.size())
+            {
+                cout << "Invalid numeric data in CSV. Skipping row." << endl;
+                continue;
+            }
+
+            pressure = stod(pressureStr, &pos);
+
+            if(pos != pressureStr.size())
+            {
+                cout << "Invalid numeric data in CSV. Skipping row." << endl;
+                continue;
+            }
+
+            vibration = stod(vibrationStr, &pos);
+
+            if(pos != vibrationStr.size())
+            {
+                cout << "Invalid numeric data in CSV. Skipping row." << endl;
+                continue;
+            }
         }
         catch(...)
         {
@@ -123,6 +150,11 @@ void loadHistoryFromCSV(vector<Equipment>& equipmentList)
 {
     ifstream file("equipment_history.csv");
 
+    if(!file.is_open())
+    {
+        return;
+    }
+
     string line;
 
     while(getline(file, line))
@@ -152,13 +184,35 @@ void loadHistoryFromCSV(vector<Equipment>& equipmentList)
 
         try
         {
-            temperature = stod(tempStr);
-            pressure = stod(pressureStr);
-            vibration = stod(vibrationStr);
+            size_t pos; // DETECT THE SIZE ONNLY FOR NUMERIC
+
+            temperature = stod(tempStr, &pos);
+
+            if(pos != tempStr.size())
+            {
+                cout << "Invalid numeric data in History CSV. Skipping row." << endl;
+                continue;
+            }
+
+            pressure = stod(pressureStr, &pos);
+
+            if(pos != pressureStr.size())
+            {
+                cout << "Invalid numeric data in History CSV. Skipping row." << endl;
+                continue;
+            }
+
+            vibration = stod(vibrationStr, &pos);
+
+            if(pos != vibrationStr.size())
+            {
+                cout << "Invalid numeric data in History CSV. Skipping row." << endl;
+                continue;
+            }
         }
         catch(...)
         {
-            cout << "Invalid numeric data in history CSV. Skipping row." << endl;
+            cout << "Invalid numeric data in History CSV. Skipping row." << endl;
             continue;
         }
 
@@ -217,6 +271,11 @@ void saveHistoryToCSV(const vector<Equipment>& equipmentList)
 void loadStatusHistoryFromCSV(vector<Equipment>& equipmentList)
 {
     ifstream file("equipment_status_history.csv");
+
+    if(!file.is_open())
+    {
+        return;
+    }
 
     string line;
 
