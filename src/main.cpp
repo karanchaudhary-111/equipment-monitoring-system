@@ -578,18 +578,40 @@ int main()
                     break;
                 }
 
-                // DELETE EQUIPMENT FROM VECTOR
-                equipmentList.erase(equipmentList.begin() + index);
+                char confirm;
 
-                cout << "Equipment deleted successfully." << endl;
+                do
+                {
+                    cout << "Are you sure you want to delete this equipment? (y/n): ";
+                    cin >> confirm;
 
-                // Save remaining equipment and histories
-                saveAllToCSV(equipmentList);
-                saveHistoryToCSV(equipmentList);
-                saveStatusHistoryToCSV(equipmentList);
+                    // INVALID INPUT CHECK FOR CONFIRM
+                    if(confirm != 'y' && confirm != 'Y' && confirm != 'n' && confirm != 'N')
+                    {
+                        cout << "Invalid choice. Please enter y or n." << endl;
+                    }
 
+                } while(confirm != 'y' && confirm != 'Y' && confirm != 'n' && confirm != 'N' );
+
+                // DELETE EQUIPMENT IF USER CONFIRMS
+                if(confirm == 'y' || confirm == 'Y')
+                {
+                    // DELETE EQUIPMENT FROM VECTOR
+                    equipmentList.erase(equipmentList.begin() + index);
+                    cout << "Equipment deleted successfully." << endl;
+
+                    // Save remaining equipment and histories
+                    saveAllToCSV(equipmentList);
+                    saveHistoryToCSV(equipmentList);
+                    saveStatusHistoryToCSV(equipmentList);
+
+                }else // CANCEL DELETION IF USER SELECTS NO
+                {
+                    cout << "Deletion cancelled." << endl;
+                }
 
                 break;
+
             }// CASE 5 IS COMPLETED
 
             case 6: // ==== SHOW SUMMARY DASHBOARD ====
