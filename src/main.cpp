@@ -351,11 +351,25 @@ int main()
         {
             case 1: // ==== ADD EQUIPMENT CODE HERE ====
             {
-
                 int n;
 
-                cout << "Enter number of equipments: ";
-                cin >> n;
+                while(true)
+                {
+                    cout << "Enter number of equipments: ";
+                    cin >> n;
+
+                    if(cin.fail() || cin.peek() != '\n' || n <= 0)
+                    {
+                        cin.clear();
+                        cin.ignore(numeric_limits<streamsize>::max(), '\n');
+
+                        cout << "Invalid input. Please enter a positive number." << endl;
+                    }
+                    else
+                    {
+                        break;
+                    }
+                }
 
                 // CHECK NUMBER OF EQUIPMENTS
                 if(n < 0)
