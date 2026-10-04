@@ -30,6 +30,20 @@ double getValidInput(string prompt)
     }
 }
 
+// INPUT NAME IS VALID OR NOT
+bool isValidEquipmentName(string name)
+{
+    for(int i = 0; i < name.size(); i++)
+    {
+        if(name[i] != ' ')
+        {
+            return true;
+        }
+    }
+
+    return false;
+}
+
 //  USED TO RESTORE THE  EQUIPMENT PERMANENT 
 void loadFromCSV(vector<Equipment>& equipmentList)
 {
@@ -44,18 +58,7 @@ void loadFromCSV(vector<Equipment>& equipmentList)
         string name;
         getline(ss, name, ',');
 
-        bool hasNonSpace = false;
-
-        for(int i = 0; i < name.size(); i++)
-        {
-            if(name[i] != ' ')
-            {
-                hasNonSpace = true;
-                break;
-            }
-        }
-
-        if(name.empty() || !hasNonSpace)
+        if(!isValidEquipmentName(name))
         {
             cout << "Invalid equipment name in CSV. Skipping row." << endl;
             continue;
@@ -128,18 +131,7 @@ void loadHistoryFromCSV(vector<Equipment>& equipmentList)
         string name;
         getline(ss, name, ',');
 
-        bool hasNonSpace = false;
-
-        for(int i = 0; i < name.size(); i++)
-        {
-            if(name[i] != ' ')
-            {
-                hasNonSpace = true;
-                break;
-            }
-        }
-
-        if(name.empty() || !hasNonSpace)
+        if(!isValidEquipmentName(name))
         {
             cout << "Invalid equipment name in history CSV. Skipping row." << endl;
             continue;
@@ -235,20 +227,9 @@ void loadStatusHistoryFromCSV(vector<Equipment>& equipmentList)
         string name;
         getline(ss, name, ',');
 
-        bool hasNonSpace = false;
-
-        for(int i = 0; i < name.size(); i++)
+        if(!isValidEquipmentName(name))
         {
-            if(name[i] != ' ')
-            {
-                hasNonSpace = true;
-                break;
-            }
-        }
-
-        if(name.empty() || !hasNonSpace)
-        {
-            cout << "Invalid equipment name in Status History CSV. Skipping row." << endl;
+            cout << "Invalid equipment name in status history CSV. Skipping row." << endl;
             continue;
         }
 
@@ -290,12 +271,15 @@ void saveStatusHistoryToCSV(const vector<Equipment>& equipmentList)
     }
 }
 
+
 // CONVERT THE EQUIPMENT NAME IN LOWERCASE
 string convToLower(string name){
     int n = name.size();
 
-    for(int i = 0; i < n; i++){
-        if(name[i] >= 'A' && name[i] <= 'Z'){
+    for(int i = 0; i < n; i++)
+    {
+        if(name[i] >= 'A' && name[i] <= 'Z')
+        {
             name[i] = name[i] - 'A' + 'a';
         }
     }
@@ -401,32 +385,19 @@ int main()
                         duplicateName = false;
 
                         // REMOVE INVALID NAME LIKE SPACE AND EMPTY NAME
-                        bool hasNonSpace = false;
-
                         do
                         {
-                            hasNonSpace = false;
-
                             cout << "Enter equipment name: ";
                             getline(cin, name);
 
-                            for(int j = 0; j < name.size(); j++)
-                            {
-                                if(name[j] != ' ')
-                                {
-                                    hasNonSpace = true;
-                                    break;
-                                }
-                            }
-
-                            if(name.empty() || !hasNonSpace)
+                            if(!isValidEquipmentName(name))
                             {
                                 cout << "Invalid equipment name. "
                                     << "Name cannot be empty or contain only spaces."
                                     << endl;
                             }
 
-                        } while(name.empty() || !hasNonSpace);
+                        } while(!isValidEquipmentName(name));
 
                         // CHECK IF EQUIPMENT NAME ALREADY EXISTS
                         int index = findEquipment(equipmentList, name);
