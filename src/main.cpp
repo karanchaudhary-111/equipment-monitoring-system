@@ -30,8 +30,30 @@ double getValidInput(string prompt)
     }
 }
 
+// CONVERT STRING TO DOUBLE AND CHECK VALID NUMERIC DATA
+bool convertToDouble(string text, double &value)
+{
+    size_t pos;
+
+    try
+    {
+        value = stod(text, &pos);
+
+        if(pos != text.size())
+        {
+            return false;
+        }
+
+        return true;
+    }
+    catch(...)
+    {
+        return false;
+    }
+}
+
 // INPUT NAME IS VALID OR NOT
-bool isValidEquipmentName(string name)
+bool isValidText(string name)
 {
     for(int i = 0; i < name.size(); i++)
     {
@@ -63,7 +85,7 @@ void loadFromCSV(vector<Equipment>& equipmentList)
         string name;
         getline(ss, name, ',');
 
-        if(!isValidEquipmentName(name))
+        if(!isValidText(name))
         {
             cout << "Invalid equipment name in CSV. Skipping row." << endl;
             continue;
@@ -82,35 +104,19 @@ void loadFromCSV(vector<Equipment>& equipmentList)
         double pressure;
         double vibration;
 
-        try
+        if(!convertToDouble(tempStr, temperature))
         {
-            size_t pos; // DETECT THE SIZE ONNLY FOR NUMERIC
-
-            temperature = stod(tempStr, &pos);
-
-            if(pos != tempStr.size())
-            {
-                cout << "Invalid numeric data in CSV. Skipping row." << endl;
-                continue;
-            }
-
-            pressure = stod(pressureStr, &pos);
-
-            if(pos != pressureStr.size())
-            {
-                cout << "Invalid numeric data in CSV. Skipping row." << endl;
-                continue;
-            }
-
-            vibration = stod(vibrationStr, &pos);
-
-            if(pos != vibrationStr.size())
-            {
-                cout << "Invalid numeric data in CSV. Skipping row." << endl;
-                continue;
-            }
+            cout << "Invalid numeric data in CSV. Skipping row." << endl;
+            continue;
         }
-        catch(...)
+
+        if(!convertToDouble(pressureStr, pressure))
+        {
+            cout << "Invalid numeric data in CSV. Skipping row." << endl;
+            continue;
+        }
+
+        if(!convertToDouble(vibrationStr, vibration))
         {
             cout << "Invalid numeric data in CSV. Skipping row." << endl;
             continue;
@@ -120,6 +126,13 @@ void loadFromCSV(vector<Equipment>& equipmentList)
         if(!getline(ss, status))
         {
             cout << "Missing data in CSV. Skipping row." << endl;
+            continue;
+        }
+
+        // CHECK EMPTY OR ONLY-SPACE STATUS
+        if(!isValidText(status))
+        {
+            cout << "Invalid status in CSV. Skipping row." << endl;
             continue;
         }
 
@@ -163,7 +176,7 @@ void loadHistoryFromCSV(vector<Equipment>& equipmentList)
         string name;
         getline(ss, name, ',');
 
-        if(!isValidEquipmentName(name))
+        if(!isValidText(name))
         {
             cout << "Invalid equipment name in history CSV. Skipping row." << endl;
             continue;
@@ -182,37 +195,21 @@ void loadHistoryFromCSV(vector<Equipment>& equipmentList)
         double pressure;
         double vibration;
 
-        try
+        if(!convertToDouble(tempStr, temperature))
         {
-            size_t pos; // DETECT THE SIZE ONNLY FOR NUMERIC
-
-            temperature = stod(tempStr, &pos);
-
-            if(pos != tempStr.size())
-            {
-                cout << "Invalid numeric data in History CSV. Skipping row." << endl;
-                continue;
-            }
-
-            pressure = stod(pressureStr, &pos);
-
-            if(pos != pressureStr.size())
-            {
-                cout << "Invalid numeric data in History CSV. Skipping row." << endl;
-                continue;
-            }
-
-            vibration = stod(vibrationStr, &pos);
-
-            if(pos != vibrationStr.size())
-            {
-                cout << "Invalid numeric data in History CSV. Skipping row." << endl;
-                continue;
-            }
+            cout << "Invalid numeric data in history CSV. Skipping row." << endl;
+            continue;
         }
-        catch(...)
+
+        if(!convertToDouble(pressureStr, pressure))
         {
-            cout << "Invalid numeric data in History CSV. Skipping row." << endl;
+            cout << "Invalid numeric data in history CSV. Skipping row." << endl;
+            continue;
+        }
+
+        if(!convertToDouble(vibrationStr, vibration))
+        {
+            cout << "Invalid numeric data in history CSV. Skipping row." << endl;
             continue;
         }
 
@@ -221,6 +218,13 @@ void loadHistoryFromCSV(vector<Equipment>& equipmentList)
         if(!getline(ss, status))
         {
             cout << "Missing data in history CSV. Skipping row." << endl;
+            continue;
+        }
+
+        // CHECK EMPTY OR ONLY-SPACE STATUS
+        if(!isValidText(status))
+        {
+            cout << "Invalid status in history CSV. Skipping row." << endl;
             continue;
         }
 
@@ -286,7 +290,7 @@ void loadStatusHistoryFromCSV(vector<Equipment>& equipmentList)
         string name;
         getline(ss, name, ',');
 
-        if(!isValidEquipmentName(name))
+        if(!isValidText(name))
         {
             cout << "Invalid equipment name in status history CSV. Skipping row." << endl;
             continue;
@@ -297,6 +301,13 @@ void loadStatusHistoryFromCSV(vector<Equipment>& equipmentList)
         if(!getline(ss, transition))
         {
             cout << "Missing transition in Status History CSV. Skipping row." << endl;
+            continue;
+        }
+
+        // CHECK EMPTY OR ONLY-SPACE STATUS
+        if(!isValidText(transition))
+        {
+            cout << "Invalid transition in status history CSV. Skipping row." << endl;
             continue;
         }
 
@@ -463,14 +474,14 @@ int main()
                             cout << "Enter equipment name: ";
                             getline(cin, name);
 
-                            if(!isValidEquipmentName(name))
+                            if(!isValidText(name))
                             {
                                 cout << "Invalid equipment name. "
                                     << "Name cannot be empty or contain only spaces."
                                     << endl;
                             }
 
-                        } while(!isValidEquipmentName(name));
+                        } while(!isValidText(name));
 
                         // CHECK IF EQUIPMENT NAME ALREADY EXISTS
                         int index = findEquipment(equipmentList, name);
