@@ -7,6 +7,33 @@
 
 using namespace std;
 
+// REMOVE LEADING AND TRAILING SPACES FROM TEXT
+string trim(string text)
+{
+    int start = 0;
+
+    while(start < text.size() && text[start] == ' ')
+    {
+        start++;
+    }
+
+    if(start == text.size())
+    {
+        return "";
+    }
+
+    int end = text.size() - 1;
+
+    // ENDING SPACES LOGIC
+    while(end >= start && text[end] == ' ')
+    {
+        end--;
+    }
+
+    // TRIMMED STRING RETURN
+    return text.substr(start, end - start + 1);
+}
+
 // FOR GETTING VALID INPUT FROM USERS
 double getValidInput(string prompt)
 {
@@ -66,6 +93,38 @@ bool isValidText(string name)
     return false;
 }
 
+// CONVERT THE EQUIPMENT NAME IN LOWERCASE
+string convToLower(string name){
+    int n = name.size();
+
+    for(int i = 0; i < n; i++)
+    {
+        if(name[i] >= 'A' && name[i] <= 'Z')
+        {
+            name[i] = name[i] - 'A' + 'a';
+        }
+    }
+
+    return name;
+}
+
+// RETURNS THE INDEX OF THE EQUIPMENT BY NAME (CASE-INSENSITIVE), OR -1 IF NOT FOUND.
+int findEquipment(vector<Equipment>& equipmentList, string name)
+{
+    name = trim(name);
+    for(int i = 0; i < equipmentList.size(); i++)
+    {
+        string existingName = equipmentList[i].getName();
+
+        if(convToLower(name) == convToLower(existingName))
+        {
+            return i;
+        }
+    }
+
+    return -1;
+}
+
 //  USED TO RESTORE THE  EQUIPMENT PERMANENT 
 void loadFromCSV(vector<Equipment>& equipmentList)
 {
@@ -84,6 +143,7 @@ void loadFromCSV(vector<Equipment>& equipmentList)
 
         string name;
         getline(ss, name, ',');
+        name = trim(name);
 
         if(!isValidText(name))
         {
@@ -93,12 +153,15 @@ void loadFromCSV(vector<Equipment>& equipmentList)
 
         string tempStr;
         getline(ss, tempStr, ',');
+        tempStr = trim(tempStr);
 
         string pressureStr;
         getline(ss, pressureStr, ',');
+        pressureStr = trim(pressureStr);
 
         string vibrationStr;
         getline(ss, vibrationStr, ',');
+        vibrationStr = trim(vibrationStr);
 
         double temperature;
         double pressure;
@@ -128,6 +191,7 @@ void loadFromCSV(vector<Equipment>& equipmentList)
             cout << "Missing data in CSV. Skipping row." << endl;
             continue;
         }
+        status = trim(status);
 
         // CHECK EMPTY OR ONLY-SPACE STATUS
         if(!isValidText(status))
@@ -175,6 +239,7 @@ void loadHistoryFromCSV(vector<Equipment>& equipmentList)
         stringstream ss(line);
         string name;
         getline(ss, name, ',');
+        name = trim(name);
 
         if(!isValidText(name))
         {
@@ -184,12 +249,15 @@ void loadHistoryFromCSV(vector<Equipment>& equipmentList)
 
         string tempStr;
         getline(ss, tempStr, ',');
+         tempStr = trim(tempStr);
 
         string pressureStr;
         getline(ss, pressureStr, ',');
+        pressureStr = trim(pressureStr);
 
         string vibrationStr;
         getline(ss, vibrationStr, ',');
+         vibrationStr = trim(vibrationStr);
 
         double temperature;
         double pressure;
@@ -220,6 +288,7 @@ void loadHistoryFromCSV(vector<Equipment>& equipmentList)
             cout << "Missing data in history CSV. Skipping row." << endl;
             continue;
         }
+        status = trim(status);
 
         // CHECK EMPTY OR ONLY-SPACE STATUS
         if(!isValidText(status))
@@ -236,14 +305,12 @@ void loadHistoryFromCSV(vector<Equipment>& equipmentList)
         reading.vibration = vibration;
         reading.status = status;
 
-        // Find which equipment this history belongs to
-        for(Equipment &equipment : equipmentList)
+        int index = findEquipment(equipmentList, name);
+
+        // FIND WHICH EQUIPMENT THIS HISTORY BELONGS TO
+        if(index != -1)
         {
-            if(equipment.getName() == name)
-            {
-                equipment.addHistoryReading(reading);
-                break;
-            }
+            equipmentList[index].addHistoryReading(reading);
         }
 
     }
@@ -289,6 +356,7 @@ void loadStatusHistoryFromCSV(vector<Equipment>& equipmentList)
 
         string name;
         getline(ss, name, ',');
+        name = trim(name);
 
         if(!isValidText(name))
         {
@@ -303,21 +371,21 @@ void loadStatusHistoryFromCSV(vector<Equipment>& equipmentList)
             cout << "Missing transition in Status History CSV. Skipping row." << endl;
             continue;
         }
+        transition = trim(transition);
 
-        // CHECK EMPTY OR ONLY-SPACE STATUS
+        // CHECK EMPTY OR ONLY-SPACE TRANSITION
         if(!isValidText(transition))
         {
             cout << "Invalid transition in status history CSV. Skipping row." << endl;
             continue;
         }
 
-        for(Equipment &equipment : equipmentList)
+        int index = findEquipment(equipmentList, name);
+
+        // FIND WHICH EQUIPMENT THIS STATUS HISTORY BELONGS TO
+        if(index != -1)
         {
-            if(equipment.getName() == name)
-            {
-                equipment.addStatusHistory(transition);
-                break;
-            }
+            equipmentList[index].addStatusHistory(transition);
         }
     }
 }
@@ -339,38 +407,6 @@ void saveStatusHistoryToCSV(const vector<Equipment>& equipmentList)
                  << endl;
         }
     }
-}
-
-
-// CONVERT THE EQUIPMENT NAME IN LOWERCASE
-string convToLower(string name){
-    int n = name.size();
-
-    for(int i = 0; i < n; i++)
-    {
-        if(name[i] >= 'A' && name[i] <= 'Z')
-        {
-            name[i] = name[i] - 'A' + 'a';
-        }
-    }
-
-    return name;
-}
-
-// Returns the index of the equipment by name (case-insensitive), or -1 if not found.
-int findEquipment(vector<Equipment>& equipmentList, string name)
-{
-    for(int i = 0; i < equipmentList.size(); i++)
-    {
-        string existingName = equipmentList[i].getName();
-
-        if(convToLower(name) == convToLower(existingName))
-        {
-            return i;
-        }
-    }
-
-    return -1;
 }
 
 int main()
@@ -473,6 +509,7 @@ int main()
                         {
                             cout << "Enter equipment name: ";
                             getline(cin, name);
+                            name = trim(name);
 
                             if(!isValidText(name))
                             {
