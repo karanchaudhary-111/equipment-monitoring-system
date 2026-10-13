@@ -242,9 +242,27 @@ void loadFromCSV(vector<Equipment>& equipmentList)
         {
             cout << "Invalid status in CSV. Skipping row." << endl;
             continue;
+        } 
+
+        // CREATE EQUIPMENT OBJECT
+        Equipment loadedEquipment(name, temperature, pressure, vibration);
+
+        // CHECK CSV STATUS AGAINST CALCULATED STATUS
+        if(status != loadedEquipment.getStatus())
+        {
+            cout << "Status mismatch in CSV. Skipping row." << endl;
+            continue;
         }
 
-        Equipment loadedEquipment(name, temperature, pressure, vibration);
+        // REMOVE DUPLICATE DURING CSV LOADING
+        if(findEquipment(equipmentList, name) != -1)
+        {
+            cout << "Duplicate equipment in CSV. Skipping row." << endl;
+            continue;
+        }
+
+        // ADD VALID EQUIPMENT TO VECTOR
+        equipmentList.push_back(loadedEquipment);
         equipmentList.push_back(loadedEquipment);
     }
 }
@@ -356,6 +374,10 @@ void loadHistoryFromCSV(vector<Equipment>& equipmentList)
         {
             equipmentList[index].addHistoryReading(reading);
         }
+        else
+        {
+            cout << "Equipment not found for history. Skipping row." << endl;
+        }
 
     }
 }
@@ -430,6 +452,10 @@ void loadStatusHistoryFromCSV(vector<Equipment>& equipmentList)
         if(index != -1)
         {
             equipmentList[index].addStatusHistory(transition);
+        }
+        else
+        {
+            cout << "Equipment not found for status history. Skipping row." << endl;
         }
     }
 }
