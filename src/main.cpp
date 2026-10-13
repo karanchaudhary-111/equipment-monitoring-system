@@ -93,6 +93,50 @@ bool isValidText(string name)
     return false;
 }
 
+// ONLY VALID STATUS LIKE NORMAL, WARNING
+bool isValidStatus(string status)
+{
+    if(status == "NORMAL" || status == "WARNING" || status == "CRITICAL")
+    {
+        return true;
+    }
+
+    return false;
+}
+
+// CHECK WHETHER BOTH STATUSES IN A TRANSITION ARE VALID
+bool isValidTransition(string transition)
+{
+    // FIND THE POSITION OF ARROW
+    size_t pos = transition.find("->");
+
+    // CHECK IF ARROW IS MISSING
+    if(pos == string::npos)
+    {
+        return false;
+    }
+
+    // CHECK IF MULTIPLE ARROWS EXIST
+    size_t secondPos = transition.find("->", pos + 2);
+
+    if(secondPos != string::npos)
+    {
+        return false;
+    }
+
+    // EXTRACT OLD AND NEW STATUS
+    string oldStatus = trim(transition.substr(0, pos));
+    string newStatus = trim(transition.substr(pos + 2));
+
+    // CHECK BOTH STATUSES
+    if(isValidStatus(oldStatus) && isValidStatus(newStatus) && oldStatus != newStatus)
+    {
+        return true;
+    }
+
+    return false;
+}
+
 // CONVERT THE EQUIPMENT NAME IN LOWERCASE
 string convToLower(string name){
     int n = name.size();
@@ -194,7 +238,7 @@ void loadFromCSV(vector<Equipment>& equipmentList)
         status = trim(status);
 
         // CHECK EMPTY OR ONLY-SPACE STATUS
-        if(!isValidText(status))
+        if(!isValidStatus(status))
         {
             cout << "Invalid status in CSV. Skipping row." << endl;
             continue;
@@ -291,7 +335,7 @@ void loadHistoryFromCSV(vector<Equipment>& equipmentList)
         status = trim(status);
 
         // CHECK EMPTY OR ONLY-SPACE STATUS
-        if(!isValidText(status))
+        if(!isValidStatus(status))
         {
             cout << "Invalid status in history CSV. Skipping row." << endl;
             continue;
@@ -374,7 +418,7 @@ void loadStatusHistoryFromCSV(vector<Equipment>& equipmentList)
         transition = trim(transition);
 
         // CHECK EMPTY OR ONLY-SPACE TRANSITION
-        if(!isValidText(transition))
+        if(!isValidTransition(transition))
         {
             cout << "Invalid transition in status history CSV. Skipping row." << endl;
             continue;
